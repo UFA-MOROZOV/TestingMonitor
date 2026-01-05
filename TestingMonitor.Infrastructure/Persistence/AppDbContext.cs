@@ -18,6 +18,6 @@ internal sealed class AppDbContext : DbContext, IDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
-    public DbSet<TestEntity> TestEntities => Set<TestEntity>();
+    public DbSet<Compiler> Compilers => Set<Compiler>();
 }
 

@@ -12,23 +12,31 @@ namespace TestingMonitor.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TestEntities",
+                name: "Compilers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestEntities", x => x.Id);
+                    table.PrimaryKey("PK_Compilers", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Compilers_Name_Version",
+                table: "Compilers",
+                columns: new[] { "Name", "Version" },
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TestEntities");
+                name: "Compilers");
         }
     }
 }

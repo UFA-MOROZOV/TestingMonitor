@@ -5,7 +5,7 @@ namespace TestingMonitor.Application.Interfaces;
 
 public interface IDbContext
 {
-    DbSet<TestEntity> TestEntities { get; }
+    DbSet<Compiler> Compilers { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

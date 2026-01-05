@@ -11,7 +11,7 @@ using TestingMonitor.Infrastructure.Persistence;
 namespace TestingMonitor.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251206100656_Initial")]
+    [Migration("20260103081909_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace TestingMonitor.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TestingMonitor.Domain.Entities.TestEntity", b =>
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.Compiler", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,9 +32,20 @@ namespace TestingMonitor.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.ToTable("TestEntities");
+                    b.HasIndex("Name", "Version")
+                        .IsUnique();
+
+                    b.ToTable("Compilers");
                 });
 #pragma warning restore 612, 618
         }
