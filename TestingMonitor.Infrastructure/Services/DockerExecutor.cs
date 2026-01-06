@@ -32,12 +32,14 @@ internal sealed class DockerExecutor : IDockerExecutor
 
         var fileName = $"{Guid.NewGuid()}.cpp";
         var filePath = Path.Combine(TempPath, fileName);
+        var compiledPath = Path.Combine(TempPath, Path.GetFileNameWithoutExtension(fileName));
 
         await File.WriteAllTextAsync(filePath, code, cancellationToken);
 
         var output = await ExecuteAsync(compiler, fileName, cancellationToken);
 
         File.Delete(filePath);
+        File.Delete(compiledPath);
 
         return output;
 
