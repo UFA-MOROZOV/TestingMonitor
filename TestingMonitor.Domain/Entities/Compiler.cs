@@ -19,4 +19,9 @@ public sealed class Compiler
     /// Версия.
     /// </summary>
     public string Version { get; set; } = null!;
+
+    /// <summary>
+    /// Имя команды.
+    /// </summary>
+    public string CommandName { get; set; } = null!;
 }
