@@ -425,11 +425,23 @@ internal sealed class DockerExecutor : IDockerExecutor
                 FromImage = compiler.Name,
                 Tag = compiler.Version
             };
-            
+
+            var progress = new Progress<JSONMessage>(message =>
+            {
+                if (!string.IsNullOrEmpty(message.Status))
+                {
+                    Console.WriteLine($"Docker: {message.Status} {message.ProgressMessage ?? ""}");
+                }
+                else if (!string.IsNullOrEmpty(message.ErrorMessage))
+                {
+                    Console.WriteLine($"Docker Error: {message.ErrorMessage}");
+                }
+            });
+
             await Client.Images.CreateImageAsync(
                 createParameters,
                 null,
-                null,
+                progress,
                 cancellationToken
             );
 

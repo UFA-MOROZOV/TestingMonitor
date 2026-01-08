@@ -31,5 +31,9 @@ public sealed class CompilerController(IMediator mediator) : Controller
     [HttpPost("/api/compilers/{id:int}/download")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DownloadDocker(int id, CancellationToken cancellationToken)
-        => await mediator.Send(new CompilerToDownloadDockerCommand(id), cancellationToken);
+    {
+        await mediator.Send(new CompilerToDownloadDockerCommand(id), cancellationToken);
+
+        return NoContent();
+    }
 }

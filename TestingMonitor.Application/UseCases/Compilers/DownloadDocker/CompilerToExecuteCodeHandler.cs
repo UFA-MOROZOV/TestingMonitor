@@ -25,6 +25,8 @@ internal sealed class CompilerToDownloadDockerHandler (IDbContext dbContext, IDo
 
         compiler.HasDockerLocally = true;
 
+        await dbContext.SaveChangesAsync(cancellationToken);
+
         return Unit.Value;
     }
 }
