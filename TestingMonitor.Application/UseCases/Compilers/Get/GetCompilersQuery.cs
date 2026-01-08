@@ -20,6 +20,8 @@ public sealed class GetCompilersQuery : IRequest<List<CompilerDto>>
                 Id  = x.Id,
                 Name = x.Name,
                 Version = x.Version,
+                HasDockerLocally = x.HasDockerLocally,
+                CommandName = x.CommandName,
             }).ToList();
         }
     }

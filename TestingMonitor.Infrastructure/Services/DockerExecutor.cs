@@ -400,6 +400,63 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
     }
 
+    public async Task<bool> DownloadCompilerAsync(Compiler compiler, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var imageName = $"{compiler.Name}:{compiler.Version}";
+
+            var images = await Client.Images.ListImagesAsync(new ImagesListParameters
+            {
+                All = true
+            }, cancellationToken);
+
+            var existsLocally = images.Any(img =>
+                img.RepoTags != null &&
+                img.RepoTags.Any(tag => tag == imageName || tag == $"{imageName}:latest"));
+
+            if (existsLocally)
+            {
+                return true;
+            }
+
+            var createParameters = new ImagesCreateParameters
+            {
+                FromImage = compiler.Name,
+                Tag = compiler.Version
+            };
+
+            var progress = new Progress<JSONMessage>(message =>
+            {
+                if (!string.IsNullOrEmpty(message.Status))
+                {
+                    Console.WriteLine($"Docker: {message.Status} {message.ProgressMessage ?? ""}");
+                }
+                else if (!string.IsNullOrEmpty(message.ErrorMessage))
+                {
+                    Console.WriteLine($"Docker Error: {message.ErrorMessage}");
+                }
+            });
+
+            await Client.Images.CreateImageAsync(
+                createParameters,
+                null,
+                progress,
+                cancellationToken
+            );
+
+            return true;
+        }
+        catch (DockerApiException ex)
+        {
+            throw new InvalidOperationException($"Failed to download compiler image: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to download compiler image: {ex.Message}", ex);
+        }
+    }
+
     public async Task Cleanup(string containerId)
     {
         try

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TestingMonitor.Application.UseCases.Compilers.DownloadDocker;
 using TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
 using TestingMonitor.Application.UseCases.Compilers.Get;
 
@@ -23,4 +24,16 @@ public sealed class CompilerController(IMediator mediator) : Controller
     [ProducesResponseType<string>(StatusCodes.Status200OK)]
     public async Task<ActionResult<string>> ExecuteCode([FromBody] CompilerToExecuteCodeCommand command, CancellationToken cancellationToken)
         => await mediator.Send(command, cancellationToken);
+
+    /// <summary>
+    /// Загрузка докера компилятора.
+    /// </summary>
+    [HttpPost("/api/compilers/{id:int}/download")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult<Unit>> DownloadDocker(int id, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new CompilerToDownloadDockerCommand(id), cancellationToken);
+
+        return NoContent();
+    }
 }

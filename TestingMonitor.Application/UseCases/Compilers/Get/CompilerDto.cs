@@ -19,4 +19,14 @@ public sealed class CompilerDto
     /// Версия.
     /// </summary>
     public string Version { get; set; } = null!;
+
+    /// <summary>
+    /// Имя команды.
+    /// </summary>
+    public string CommandName { get; set; } = null!;
+
+    /// <summary>
+    /// Есть ли локальный докер.
+    /// </summary>
+    public bool HasDockerLocally { get; set; }
 }
