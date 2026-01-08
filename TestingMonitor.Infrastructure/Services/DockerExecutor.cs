@@ -437,12 +437,10 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
         catch (DockerApiException ex)
         {
-            progress?.Report($"Failed to download image: {ex.StatusCode} - {ex.ResponseBody}");
             throw new InvalidOperationException($"Failed to download compiler image: {ex.Message}", ex);
         }
         catch (Exception ex)
         {
-            progress?.Report($"Failed to download image: {ex.Message}");
             throw new InvalidOperationException($"Failed to download compiler image: {ex.Message}", ex);
         }
     }
