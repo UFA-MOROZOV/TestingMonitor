@@ -10,4 +10,6 @@ namespace TestingMonitor.Application.Interfaces;
 public interface IDockerExecutor
 {
     public Task<string> ExecuteCodeAsync(Compiler compiler, string code, CancellationToken cancellationToken);
+
+    public Task<bool> DownloadCompilerAsync(Compiler compiler, IProgress<string> progress, CancellationToken cancellationToken);
 }

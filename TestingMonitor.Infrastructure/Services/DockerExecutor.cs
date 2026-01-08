@@ -400,6 +400,76 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
     }
 
+    public async Task<bool> DownloadCompilerAsync(Compiler compiler, IProgress<string> progress, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var imageName = $"{compiler.Name}:{compiler.Version}";
+            progress?.Report($"Checking if image {imageName} exists locally...");
+
+            var images = await Client.Images.ListImagesAsync(new ImagesListParameters
+            {
+                All = true
+            }, cancellationToken);
+
+            var existsLocally = images.Any(img =>
+                img.RepoTags != null &&
+                img.RepoTags.Any(tag => tag == imageName || tag == $"{imageName}:latest"));
+
+            if (existsLocally)
+            {
+                progress?.Report($"Image {imageName} already exists locally.");
+                return true;
+            }
+
+            progress?.Report($"Downloading image {imageName}...");
+
+            var createParameters = new ImagesCreateParameters
+            {
+                FromImage = compiler.Name,
+                Tag = compiler.Version
+            };
+
+            var progressMessage = string.Empty;
+            var progressHandler = new Progress<JSONMessage>(message =>
+            {
+                if (!string.IsNullOrEmpty(message.Status))
+                {
+                    var currentProgress = $"{message.Status} {message.ProgressMessage ?? ""}".Trim();
+                    if (currentProgress != progressMessage)
+                    {
+                        progressMessage = currentProgress;
+                        progress?.Report(progressMessage);
+                    }
+                }
+                else if (!string.IsNullOrEmpty(message.ErrorMessage))
+                {
+                    progress?.Report($"Error: {message.ErrorMessage}");
+                }
+            });
+
+            await Client.Images.CreateImageAsync(
+                createParameters,
+                null,
+                progressHandler,
+                cancellationToken
+            );
+
+            progress?.Report($"Successfully downloaded image {imageName}");
+            return true;
+        }
+        catch (DockerApiException ex)
+        {
+            progress?.Report($"Failed to download image: {ex.StatusCode} - {ex.ResponseBody}");
+            throw new InvalidOperationException($"Failed to download compiler image: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            progress?.Report($"Failed to download image: {ex.Message}");
+            throw new InvalidOperationException($"Failed to download compiler image: {ex.Message}", ex);
+        }
+    }
+
     public async Task Cleanup(string containerId)
     {
         try
