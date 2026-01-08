@@ -21,12 +21,7 @@ internal sealed class CompilerToDownloadDockerHandler (IDbContext dbContext, IDo
             return Unit.Value; 
         }
 
-        var progress = new Progress<string>(message =>
-        {
-            Console.WriteLine($"Download progress: {message}");
-        });
-
-        var output = await dockerExecutor.DownloadCompilerAsync(compiler, progress, cancellationToken);
+        var output = await dockerExecutor.DownloadCompilerAsync(compiler, cancellationToken);
 
         compiler.HasDockerLocally = true;
 
