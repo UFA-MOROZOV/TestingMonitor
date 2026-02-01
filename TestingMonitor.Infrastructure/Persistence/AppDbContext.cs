@@ -19,5 +19,9 @@ internal sealed class AppDbContext : DbContext, IDbContext
     }
 
     public DbSet<Compiler> Compilers => Set<Compiler>();
+
+    public DbSet<Test> Tests => Set<Test>();
+
+    public DbSet<TestGroup> TestGroups => Set<TestGroup>();
 }
 
