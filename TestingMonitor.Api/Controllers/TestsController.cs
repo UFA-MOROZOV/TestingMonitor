@@ -7,7 +7,7 @@ using TestingMonitor.Application.UseCases.Compilers.Get;
 namespace TestingMonitor.Api.Controllers;
 
 [Route("/api/compilers")]
-public sealed class CompilerController(IMediator mediator) : Controller
+public sealed class TestsController(IMediator mediator) : Controller
 {
     /// <summary>
     /// Получение всех компиляторов.
