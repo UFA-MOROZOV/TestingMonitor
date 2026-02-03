@@ -11,4 +11,9 @@ public sealed class TestGroupToUploadCommand : IRequest<Unit>
     /// Поток с зип файлом.
     /// </summary>
     public Stream Stream { get; set; } = null!;
+
+    /// <summary>
+    /// Идентификатор группы, в которой будут находиться тесты.
+    /// </summary>
+    public Guid? ParentGroupId { get; set; }
 }

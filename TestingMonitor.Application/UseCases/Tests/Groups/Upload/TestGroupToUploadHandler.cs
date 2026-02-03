@@ -1,26 +1,27 @@
-﻿using System.IO.Compression;
-using MediatR;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using TestingMonitor.Application.Exceptions;
+using TestingMonitor.Application.Helpers;
+using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 
 /// <summary>
 /// Обработчик загрузки зип с тестами. 
 /// </summary>
-internal sealed class TestGroupToUploadHandler : IRequestHandler<TestGroupToUploadCommand, Unit>
+internal sealed class TestGroupToUploadHandler(IDbContext dbContext, IFileProvider fileProvider)
+    : IRequestHandler<TestGroupToUploadCommand, Unit>
 {
     public async Task<Unit> Handle(TestGroupToUploadCommand request, CancellationToken cancellationToken)
     {
-        using var archive = new ZipArchive(request.Stream, ZipArchiveMode.Read);
-
-        Dictionary<string, Guid> groupIds = new();
-
-        foreach (var entry in archive.Entries)
+        if (request.ParentGroupId.HasValue && !await dbContext.TestGroups.AnyAsync(x => request.ParentGroupId == x.Id,
+            cancellationToken))
         {
-            if (entry.FullName)
-            {
-
-            }
+            throw new ApiException("Нет группы родителя.");
         }
+
+        var processor = new ZipTestArchiveProcessor(dbContext, fileProvider);
+        await processor.ProcessAsync(request.Stream, request.ParentGroupId, cancellationToken);
 
         return Unit.Value;
     }
