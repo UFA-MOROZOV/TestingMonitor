@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
 
@@ -17,7 +18,8 @@ internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fi
             Name = request.Name,
         };
 
-        var path = await fileProvider.UploadFileAsync(request.Stream, test.Id);
+        var path = await fileProvider.UploadFileAsync(request.Stream, test.Id, cancellationToken)
+            ?? throw new ApiException("Не удалось сохранить файл.");
 
         test.Path = path;
 

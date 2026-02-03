@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TestingMonitor.Application.UseCases.Tests.DeleteTest;
+namespace TestingMonitor.Application.UseCases.Tests.Delete;
 
 /// <summary>
 /// Команда удаления теста.

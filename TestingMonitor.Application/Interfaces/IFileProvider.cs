@@ -3,12 +3,12 @@
 /// <summary>
 /// Провайдер файлов.
 /// </summary>
-internal interface IFileProvider
+public interface IFileProvider
 {
     /// <summary>
     /// Загрузка файлов.
     /// </summary>
-    public Task<string> UploadFileAsync(Stream stream, Guid guid, CancellationToken cancellationToken);
+    public Task<string?> UploadFileAsync(Stream stream, Guid guid, CancellationToken cancellationToken);
 
     /// <summary>
     /// Удаление файлов.

@@ -1,3 +1,4 @@
+using TestingMonitor.Api.Middlewares;
 using TestingMonitor.Application;
 using TestingMonitor.Infrastructure;
 using TestingMonitor.Infrastructure.Extensions;
@@ -18,6 +19,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

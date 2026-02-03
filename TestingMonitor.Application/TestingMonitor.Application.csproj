@@ -17,8 +17,4 @@
     <ProjectReference Include="..\TestingMonitor.Domain\TestingMonitor.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Tests\Groups\Create\" />
-  </ItemGroup>
-
 </Project>

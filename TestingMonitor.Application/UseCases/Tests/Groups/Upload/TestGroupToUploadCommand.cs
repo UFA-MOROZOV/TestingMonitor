@@ -5,7 +5,7 @@ namespace TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 /// <summary>
 /// Команда загрузки групы тестов через зип файл.
 /// </summary>
-internal class TestGroupToUploadCommand : IRequest<Unit>
+public sealed class TestGroupToUploadCommand : IRequest<Unit>
 {
     /// <summary>
     /// Поток с зип файлом.

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TestingMonitor.Application.Interfaces;
 
-namespace TestingMonitor.Application.UseCases.Tests.DeleteTest;
+namespace TestingMonitor.Application.UseCases.Tests.Delete;
 
 /// <summary>
 /// Обработчик удаления теста.
