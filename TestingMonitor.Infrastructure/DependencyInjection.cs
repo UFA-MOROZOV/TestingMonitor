@@ -17,6 +17,7 @@ public static class DependencyInjection
 
         services.AddScoped<AppDbContextInitializer>();
         services.AddSingleton<IDockerExecutor, DockerExecutor>();
+        services.AddTransient<IFileProvider, FileProvider>();
     }
 }
 
