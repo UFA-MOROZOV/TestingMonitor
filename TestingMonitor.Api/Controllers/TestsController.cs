@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TestingMonitor.Api.Controllers;
 
-[Route("/api/compilers")]
+[Route("/api/tests")]
 public sealed class TestsController(IMediator mediator) : Controller
 {
 
