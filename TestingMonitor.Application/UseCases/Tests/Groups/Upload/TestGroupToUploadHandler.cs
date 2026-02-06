@@ -14,14 +14,14 @@ internal sealed class TestGroupToUploadHandler(IDbContext dbContext, IFileProvid
 {
     public async Task<Unit> Handle(TestGroupToUploadCommand request, CancellationToken cancellationToken)
     {
-        if (request.ParentGroupId.HasValue && !await dbContext.TestGroups.AnyAsync(x => request.ParentGroupId == x.Id,
+        if (request.GroupId.HasValue && !await dbContext.TestGroups.AnyAsync(x => request.GroupId == x.Id,
             cancellationToken))
         {
             throw new ApiException("Нет группы родителя.");
         }
 
         var processor = new ZipTestArchiveProcessor(dbContext, fileProvider);
-        await processor.ProcessAsync(request.Stream, request.ParentGroupId, cancellationToken);
+        await processor.ProcessAsync(request.Stream, request.GroupId, cancellationToken);
 
         return Unit.Value;
     }

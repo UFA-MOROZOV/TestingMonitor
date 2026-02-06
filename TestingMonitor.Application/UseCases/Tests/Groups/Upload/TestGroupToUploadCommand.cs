@@ -15,5 +15,5 @@ public sealed class TestGroupToUploadCommand : IRequest<Unit>
     /// <summary>
     /// Идентификатор группы, в которой будут находиться тесты.
     /// </summary>
-    public Guid? ParentGroupId { get; set; }
+    public Guid? GroupId { get; set; }
 }

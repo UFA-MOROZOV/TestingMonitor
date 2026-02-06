@@ -20,5 +20,5 @@ public sealed class TestToCreateCommand : IRequest<Unit>
     /// <summary>
     /// Идентификатор группы.
     /// </summary>
-    public Guid GroupId { get; set; }
+    public Guid? GroupId { get; set; }
 }

@@ -5,7 +5,7 @@ namespace TestingMonitor.Application.UseCases.Tests.Delete;
 /// <summary>
 /// Команда удаления теста.
 /// </summary>
-internal class TestToDeleteCommand(Guid id) : IRequest<Unit>
+public sealed class TestToDeleteCommand(Guid id) : IRequest<Unit>
 {
     /// <summary>
     /// Идентификатор.
