@@ -33,6 +33,8 @@ public class AuthController(IConfiguration configuration) : ControllerBase
                 new Claim(ClaimTypes.Role, "admin"),
             }),
             Expires = DateTime.UtcNow.AddHours(2),
+            Issuer = "TestingMonitor.Api",
+            Audience = "TestingMonitor",
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
