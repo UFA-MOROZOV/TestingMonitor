@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestingMonitor.Application.UseCases.Compilers.Get;
 using TestingMonitor.Application.UseCases.Tests.Create;
@@ -11,6 +12,7 @@ using TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 namespace TestingMonitor.Api.Controllers;
 
 [Route("/api/tests")]
+[Authorize]
 public sealed class TestsController(IMediator mediator) : Controller
 {
     /// <summary>

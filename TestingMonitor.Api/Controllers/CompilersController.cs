@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestingMonitor.Application.UseCases.Compilers.DownloadDocker;
 using TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
@@ -7,6 +8,7 @@ using TestingMonitor.Application.UseCases.Compilers.Get;
 namespace TestingMonitor.Api.Controllers;
 
 [Route("/api/compilers")]
+[Authorize]
 public sealed class CompilersController(IMediator mediator) : Controller
 {
     /// <summary>
