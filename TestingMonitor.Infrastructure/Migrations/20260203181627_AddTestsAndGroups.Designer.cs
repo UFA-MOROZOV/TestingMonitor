@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestingMonitor.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TestingMonitor.Infrastructure.Persistence;
 namespace TestingMonitor.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260203181627_AddTestsAndGroups")]
+    partial class AddTestsAndGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,9 +97,12 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.Property<Guid?>("ParentGroupId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("TestGroupId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentGroupId");
+                    b.HasIndex("TestGroupId");
 
                     b.ToTable("TestGroups");
                 });
@@ -105,20 +111,16 @@ namespace TestingMonitor.Infrastructure.Migrations
                 {
                     b.HasOne("TestingMonitor.Domain.Entities.TestGroup", "TestGroup")
                         .WithMany("Tests")
-                        .HasForeignKey("TestGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TestGroupId");
 
                     b.Navigation("TestGroup");
                 });
 
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestGroup", b =>
                 {
-                    b.HasOne("TestingMonitor.Domain.Entities.TestGroup", "ParentGroup")
+                    b.HasOne("TestingMonitor.Domain.Entities.TestGroup", null)
                         .WithMany("SubGroups")
-                        .HasForeignKey("ParentGroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("ParentGroup");
+                        .HasForeignKey("TestGroupId");
                 });
 
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestGroup", b =>
