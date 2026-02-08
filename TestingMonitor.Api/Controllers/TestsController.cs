@@ -28,8 +28,8 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// Создание теста.
     /// </summary>
     [HttpPost("/api/tests")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult<Unit>> CreateTest(IFormFile file, [FromQuery] Guid? groupId,
+    [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Guid>> CreateTest(IFormFile file, [FromQuery] Guid? groupId,
         CancellationToken cancellationToken)
     {
         using var stream = file.OpenReadStream();
@@ -75,7 +75,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// <summary>
     /// Загрузка группы тестов через зип.
     /// </summary>
-    [HttpPost("/api/tests/{id:guid}")]
+    [HttpPost("/api/testsgroups/upload")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> UploadTests(IFormFile file, [FromQuery] Guid? groupId,
         CancellationToken cancellationToken)

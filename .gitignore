@@ -8,3 +8,5 @@ bin
 obj
 appsettings.Development.json
 tmp
+/Files
+/TestingMonitor.Api/Files

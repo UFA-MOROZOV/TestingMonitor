@@ -30,6 +30,11 @@ internal sealed class FileProvider : IFileProvider
     {
         try
         {
+            if (!Directory.Exists(_folder))
+            {
+                Directory.CreateDirectory(_folder);
+            }
+
             var path = Path.Combine(_folder, guid.ToString());
 
             using var fileStream = new FileStream(path, FileMode.CreateNew);

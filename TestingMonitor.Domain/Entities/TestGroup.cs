@@ -21,6 +21,11 @@ public sealed class TestGroup
     public Guid? ParentGroupId { get; set; }
 
     /// <summary>
+    /// Группа родительская.
+    /// </summary>
+    public TestGroup? ParentGroup { get; set; }
+
+    /// <summary>
     /// Тест.
     /// </summary>
     public ICollection<Test> Tests { get; set; } = [];

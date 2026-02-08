@@ -31,12 +31,12 @@ public sealed class GetTestsQuery : IRequest<GetTestsResponse>
         public async Task<GetTestsResponse> Handle(GetTestsQuery request, CancellationToken cancellationToken)
         {
             var groups = await dbContext.TestGroups
-                .Where(x => (request.Global || request.ParentId == request.ParentId))
+                .Where(x => (request.Global || request.ParentId == x.ParentGroupId))
                 .ProjectTo<ItemDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            var tests = await dbContext.TestGroups
-                .Where(x => (request.Global || request.ParentId == request.ParentId))
+            var tests = await dbContext.Tests
+                .Where(x => (request.Global || request.ParentId == x.TestGroupId))
                 .ProjectTo<ItemDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
@@ -8,14 +9,20 @@ namespace TestingMonitor.Application.UseCases.Tests.Create;
 /// <summary>
 /// Обработчик добавления тестов.
 /// </summary>
-internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToCreateCommand, Unit>
+internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToCreateCommand, Guid>
 {
-    public async Task<Unit> Handle(TestToCreateCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(TestToCreateCommand request, CancellationToken cancellationToken)
     {
+        if (!await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
+        {
+            throw new ApiException("Группы с таким идентификатором не существует.");
+        }
+
         var test = new Test
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
+            TestGroupId = request.GroupId
         };
 
         var path = await fileProvider.UploadFileAsync(request.Stream, test.Id, cancellationToken)
@@ -27,6 +34,6 @@ internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fi
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return test.Id;
     }
 }
