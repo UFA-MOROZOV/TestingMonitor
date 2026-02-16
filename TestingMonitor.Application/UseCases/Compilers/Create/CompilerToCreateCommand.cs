@@ -1,17 +1,14 @@
-﻿namespace TestingMonitor.Application.UseCases.Compilers.Get;
+﻿using MediatR;
+
+namespace TestingMonitor.Application.UseCases.Compilers.Create;
 
 /// <summary>
-/// Компилятор.
+/// Команда загрузки докера компилятора через tar.
 /// </summary>
-public sealed class CompilerDto
+public sealed class CompilerToCreateCommand : IRequest<int>
 {
     /// <summary>
-    /// Идентификатор.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
-    /// Имя образа.
+    /// Имя.
     /// </summary>
     public string Name { get; set; } = null!;
 
@@ -26,7 +23,7 @@ public sealed class CompilerDto
     public string CommandName { get; set; } = null!;
 
     /// <summary>
-    /// Есть ли локальный докер.
+    /// Tar.
     /// </summary>
-    public bool HasDockerLocally { get; set; }
+    public Stream Tar { get; set; } = Stream.Null;
 }

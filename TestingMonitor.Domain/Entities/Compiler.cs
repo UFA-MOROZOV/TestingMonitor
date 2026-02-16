@@ -11,7 +11,7 @@ public sealed class Compiler
     public int Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Имя образа.
     /// </summary>
     public string Name { get; set; } = null!;
 

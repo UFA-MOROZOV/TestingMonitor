@@ -16,8 +16,7 @@ public static class DependencyInjection
             options => options.UseNpgsql(configuration.GetConnectionString("MainDb")));
 
         services.AddScoped<AppDbContextInitializer>();
-        services.AddSingleton<IDockerExecutor, DockerExecutor>();
-        services.AddTransient<IFileProvider, FileProvider>();
+        services.AddSingleton<IDockerManager, DockerExecutor>();
     }
 }
 

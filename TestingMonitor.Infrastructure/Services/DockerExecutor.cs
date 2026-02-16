@@ -7,7 +7,7 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Services;
 
-internal sealed class DockerExecutor : IDockerExecutor
+internal sealed class DockerExecutor : IDockerManager
 {
     private DockerClient Client { get; set; } = new DockerClientConfiguration(
             new Uri("npipe://./pipe/docker_engine"))
@@ -21,6 +21,45 @@ internal sealed class DockerExecutor : IDockerExecutor
         public double MemoryLimitMB { get; set; }
         public double MemoryPercentage { get; set; }
         public DateTime Timestamp { get; set; }
+    }
+
+    public async Task<bool> LoadDockerImageAsync(Stream tarStream, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var parameters = new ImageLoadParameters
+            {
+                Quiet = false
+            };
+
+            await Client.Images.LoadImageAsync(parameters, tarStream, new Progress<JSONMessage>(), cancellationToken);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteDockerImageAsync(Compiler compiler, CancellationToken cancellationToken)
+    {
+        var deleteParams = new ImageDeleteParameters
+        {
+            Force = false,
+
+        };
+
+        try
+        {
+            await Client.Images.DeleteImageAsync($"{compiler.Name}:{compiler.Version}", deleteParams, cancellationToken);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public async Task<string> ExecuteCodeAsync(Compiler compiler, string code, CancellationToken cancellationToken)
@@ -106,6 +145,8 @@ internal sealed class DockerExecutor : IDockerExecutor
             await Cleanup(containerId);
         }
     }
+
+    #region private
 
     [Obsolete]
     private async Task MonitorContainerStatsAsync(
@@ -457,7 +498,7 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
     }
 
-    public async Task Cleanup(string containerId)
+    private async Task Cleanup(string containerId)
     {
         try
         {
@@ -471,4 +512,6 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
         catch { /* Потребуется возможное логирование */ }
     }
+
+    #endregion
 }
