@@ -26,6 +26,11 @@ public sealed class Compiler
     public string CommandName { get; set; } = null!;
 
     /// <summary>
+    /// Полное имя образа с версией.
+    /// </summary>
+    public string ImageName { get; set;} = null!;
+
+    /// <summary>
     /// Есть ли локальный докер.
     /// </summary>
     public bool HasDockerLocally { get; set; }

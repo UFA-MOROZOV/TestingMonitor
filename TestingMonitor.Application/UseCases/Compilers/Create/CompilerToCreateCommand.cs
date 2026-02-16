@@ -23,6 +23,11 @@ public sealed class CompilerToCreateCommand : IRequest<int>
     public string CommandName { get; set; } = null!;
 
     /// <summary>
+    /// Имя образа.
+    /// </summary>
+    public string ImageName { get; set; } = null!;
+
+    /// <summary>
     /// Tar.
     /// </summary>
     public Stream Tar { get; set; } = Stream.Null;

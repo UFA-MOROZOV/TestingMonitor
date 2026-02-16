@@ -2,146 +2,175 @@
     {
         "name": "gcc",
         "version": "15",
-        "commandName":  "g++"
+        "commandName": "g++",
+        "imageName":  "gcc:15"
     },
     {
         "name": "gcc",
         "version": "14",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:14"
     },
     {
         "name": "gcc",
         "version": "13",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:13"
     },
     {
         "name": "gcc",
         "version": "12",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:12"
     },
     {
         "name": "gcc",
         "version": "11",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:11"
     },
     {
         "name": "gcc",
         "version": "10",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:10"
     },
     {
         "name": "gcc",
         "version": "9",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:9"
     },
     {
         "name": "gcc",
         "version": "8",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:8"
     },
     {
         "name": "gcc",
         "version": "7",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:7"
     },
     {
         "name": "gcc",
         "version": "6",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:6"
     },
     {
         "name": "gcc",
         "version": "5",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:5"
     },
     {
         "name": "gcc",
         "version": "4",
-        "commandName": "g++"
+        "commandName": "g++",
+        "imageName": "gcc:4"
     },
     {
         "name": "clang",
         "version": "20",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:20"
     },
     {
         "name": "clang",
         "version": "19",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:19"
     },
     {
         "name": "clang",
         "version": "18",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:18"
     },
     {
         "name": "clang",
         "version": "17",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:17"
     },
     {
         "name": "clang",
         "version": "16",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:16"
     },
     {
         "name": "clang",
         "version": "15",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:15"
     },
     {
         "name": "clang",
         "version": "14",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:14"
     },
     {
         "name": "clang",
         "version": "13",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:13"
     },
     {
         "name": "clang",
         "version": "12",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:12"
     },
     {
         "name": "clang",
         "version": "11",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:11"
     },
     {
         "name": "clang",
         "version": "10",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:10"
     },
     {
         "name": "clang",
         "version": "9",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:9"
     },
     {
         "name": "clang",
         "version": "8",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:8"
     },
     {
         "name": "clang",
         "version": "7",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:7"
     },
     {
         "name": "clang",
         "version": "6",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:6"
     },
     {
         "name": "clang",
         "version": "5",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:5"
     },
     {
         "name": "clang",
         "version": "4",
-        "commandName": "clang"
+        "commandName": "clang",
+        "imageName": "clang:4"
     }
 ]

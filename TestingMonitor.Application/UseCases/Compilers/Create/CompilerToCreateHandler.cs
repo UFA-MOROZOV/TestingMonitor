@@ -18,6 +18,7 @@ internal sealed class CompilerToCreateHandler(IDbContext dbContext, IDockerManag
             Name = command.Name,
             Version = command.Version,
             CommandName = command.CommandName,
+            ImageName = command.ImageName,
         };
 
         if (command.Tar != Stream.Null)

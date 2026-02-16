@@ -52,7 +52,7 @@ internal sealed class DockerExecutor : IDockerManager
 
         try
         {
-            await Client.Images.DeleteImageAsync($"{compiler.Name}:{compiler.Version}", deleteParams, cancellationToken);
+            await Client.Images.DeleteImageAsync(compiler.ImageName, deleteParams, cancellationToken);
 
             return true;
         }
@@ -92,7 +92,7 @@ internal sealed class DockerExecutor : IDockerManager
 
         var config = new CreateContainerParameters
         {
-            Image = $"{compiler.Name}:{compiler.Version}",
+            Image = compiler.ImageName,
             Cmd = [compiler.CommandName, $"/src/{fileName}", "-o", $"/src/{nameWithoutExtension}"],
             WorkingDir = "/src",
             HostConfig = new HostConfig
