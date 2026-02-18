@@ -8,7 +8,7 @@ public sealed class TestToHeaderFile
     /// <summary>
     /// Идентификатор header.
     /// </summary>
-    public int HeaderId { get; set; }
+    public Guid HeaderId { get; set; }
 
     /// <summary>
     /// Header.
@@ -18,7 +18,7 @@ public sealed class TestToHeaderFile
     /// <summary>
     /// Идентификатор теста.
     /// </summary>
-    public int TestId { get; set; }
+    public Guid TestId { get; set; }
 
     /// <summary>
     /// Тест.

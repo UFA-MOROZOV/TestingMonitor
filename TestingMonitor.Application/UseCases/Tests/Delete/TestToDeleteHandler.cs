@@ -7,7 +7,7 @@ namespace TestingMonitor.Application.UseCases.Tests.Delete;
 /// <summary>
 /// Обработчик удаления теста.
 /// </summary>
-internal class TestToDeleteHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToDeleteCommand, Unit>
+internal sealed class TestToDeleteHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToDeleteCommand, Unit>
 {
     public async Task<Unit> Handle(TestToDeleteCommand request, CancellationToken cancellationToken)
     {

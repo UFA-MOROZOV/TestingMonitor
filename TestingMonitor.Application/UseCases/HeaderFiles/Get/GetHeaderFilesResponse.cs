@@ -14,7 +14,7 @@ public sealed class GetHeaderFilesResponse
 /// <summary>
 /// Объект группы.
 /// </summary>
-public class HeaderFileDto
+public sealed class HeaderFileDto
 {
     /// <summary>
     /// Идентификатор.

@@ -14,7 +14,7 @@ internal sealed class DockerExecutor : IDockerManager
             .CreateClient();
     private string TempPath { get; set; } = "temp";
 
-    public class ContainerStatsData
+    public sealed class ContainerStatsData
     {
         public double CpuPercentage { get; set; }
         public double MemoryUsageMB { get; set; }

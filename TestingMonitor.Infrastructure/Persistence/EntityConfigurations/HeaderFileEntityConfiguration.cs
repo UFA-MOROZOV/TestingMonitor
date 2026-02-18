@@ -4,13 +4,10 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Persistence.EntityConfigurations;
 
-internal sealed class CompilerEntityConfiguration : IEntityTypeConfiguration<Compiler>
+internal sealed class HeaderFileEntityConfiguration : IEntityTypeConfiguration<HeaderFile>
 {
-    public void Configure(EntityTypeBuilder<Compiler> builder)
+    public void Configure(EntityTypeBuilder<HeaderFile> builder)
     {
         builder.HasKey(x => x.Id);
-
-        builder.HasIndex(x => new { x.Name, x.Version })
-            .IsUnique();
     }
 }

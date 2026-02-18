@@ -10,6 +10,7 @@ using TestingMonitor.Application.UseCases.Tests.Get;
 using TestingMonitor.Application.UseCases.Tests.Groups.Create;
 using TestingMonitor.Application.UseCases.Tests.Groups.Delete;
 using TestingMonitor.Application.UseCases.Tests.Groups.Upload;
+using TestingMonitor.Application.UseCases.Tests.UpdateHeaderFiles;
 
 namespace TestingMonitor.Api.Controllers;
 
@@ -53,6 +54,14 @@ public sealed class TestsController(IMediator mediator) : Controller
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteTest(Guid id, CancellationToken cancellationToken)
         => await mediator.Send(new TestToDeleteCommand(id), cancellationToken);
+
+    /// <summary>
+    /// Обновление header файлов теста.
+    /// </summary>
+    [HttpPut("/api/tests/headerFiles")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult<Unit>> UpdateHeaderFiles(TestToUpdateHeaderFilesCommand command, CancellationToken cancellationToken)
+        => await mediator.Send(command, cancellationToken); 
 
     #region Groups
 

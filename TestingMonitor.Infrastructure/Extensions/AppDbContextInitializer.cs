@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using TestingMonitor.Domain.Entities;
 using TestingMonitor.Infrastructure.Persistence;
 
-internal class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, AppDbContext dbContext)
+internal sealed class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, AppDbContext dbContext)
 {
     internal async Task InitializeAsync()
     {

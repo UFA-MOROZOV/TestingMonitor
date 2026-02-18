@@ -19,7 +19,7 @@ public sealed class GetTestsResponse
 /// <summary>
 /// Объект группы.
 /// </summary>
-public class ItemDto
+public sealed class ItemDto
 {
     /// <summary>
     /// Идентификатор.
