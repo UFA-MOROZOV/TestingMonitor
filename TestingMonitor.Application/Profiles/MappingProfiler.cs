@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TestingMonitor.Application.UseCases.Compilers.Update;
+using TestingMonitor.Application.UseCases.HeaderFiles.Get;
 using TestingMonitor.Application.UseCases.Tests.Get;
 using TestingMonitor.Domain.Entities;
 
@@ -14,5 +15,7 @@ public class MappingProfile : Profile
         CreateMap<TestGroup, ItemDto>();
 
         CreateMap<CompilerToUpdateCommand, Compiler>();
+
+        CreateMap<HeaderFile, HeaderFileDto>();
     }
 }

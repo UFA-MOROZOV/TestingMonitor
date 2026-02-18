@@ -29,4 +29,8 @@
     <ProjectReference Include="..\TestingMonitor.Infrastructure\TestingMonitor.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
 </Project>
