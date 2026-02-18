@@ -26,9 +26,14 @@ public sealed class TestGroup
     public TestGroup? ParentGroup { get; set; }
 
     /// <summary>
-    /// Тест.
+    /// Тесты.
     /// </summary>
     public ICollection<Test> Tests { get; set; } = [];
+
+    /// <summary>
+    /// Файлы header.
+    /// </summary>
+    public ICollection<HeaderFile> HeaderFiles { get; set; } = [];
 
     /// <summary>
     /// Подгруппы.

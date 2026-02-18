@@ -1,9 +1,9 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Файл.
+/// Файлы Header.
 /// </summary>
-public sealed class Test
+public sealed class HeaderFile
 {
     /// <summary>
     /// Идентификатор.
@@ -14,11 +14,6 @@ public sealed class Test
     /// Имя.
     /// </summary>
     public string Name { get; set; } = null!;
-
-    /// <summary>
-    /// Включенные header файлы для теста.
-    /// </summary>
-    public ICollection<TestToHeaderFile> HeaderFiles { get; set; } = [];
 
     /// <summary>
     /// Путь до файла.
