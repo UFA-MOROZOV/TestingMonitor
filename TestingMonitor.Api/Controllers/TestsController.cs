@@ -137,7 +137,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// </summary>
     [HttpPost("/api/tests/headerFiles")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> CreateHeaderFile(IFormFile file, [FromQuery] Guid? groupId,
+    public async Task<ActionResult<Guid>> CreateHeaderFile(IFormFile file,
         CancellationToken cancellationToken)
     {
         using var stream = file.OpenReadStream();

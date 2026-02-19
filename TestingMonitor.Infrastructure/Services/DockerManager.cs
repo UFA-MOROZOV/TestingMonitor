@@ -480,7 +480,7 @@ internal sealed class DockerManager : IDockerManager
     {
         try
         {
-            var imageName = $"{compiler.Name}:{compiler.Version}";
+            var imageName = compiler.ImageName;
 
             var images = await Client.Images.ListImagesAsync(new ImagesListParameters
             {
@@ -504,11 +504,7 @@ internal sealed class DockerManager : IDockerManager
 
             var progress = new Progress<JSONMessage>(message =>
             {
-                if (!string.IsNullOrEmpty(message.Status))
-                {
-                    Console.WriteLine($"Docker: {message.Status} {message.ProgressMessage ?? ""}");
-                }
-                else if (!string.IsNullOrEmpty(message.ErrorMessage))
+                if (!string.IsNullOrEmpty(message.ErrorMessage))
                 {
                     Console.WriteLine($"Docker Error: {message.ErrorMessage}");
                 }

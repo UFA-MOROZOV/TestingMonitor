@@ -89,7 +89,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     /// <summary>
     /// Удаление компилятора.
     /// </summary>
-    [HttpPost("/api/compilers/{id:int}")]
+    [HttpDelete("/api/compilers/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteCompiler(int id, CancellationToken cancellationToken)
     {
@@ -101,7 +101,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     /// <summary>
     /// Удаление образа компилятора.
     /// </summary>
-    [HttpPost("/api/compilers/{id:int}/image")]
+    [HttpDelete("/api/compilers/{id:int}/image")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteImage(int id, CancellationToken cancellationToken)
     {
@@ -113,7 +113,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     /// <summary>
     /// Загрузка докера компилятора.
     /// </summary>
-    [HttpPost("/api/compilers/{id:int}/download")]
+    [HttpPut("/api/compilers/{id:int}/download")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DownloadDocker(int id, CancellationToken cancellationToken)
     {
@@ -125,7 +125,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     /// <summary>
     /// Загрузка образа компилятора через файл.
     /// </summary>
-    [HttpPost("/api/compilers/{id:int}/uploadFile")]
+    [HttpPut("/api/compilers/{id:int}/uploadFile")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> UploadDocker(int id, [FromForm] FormFile imageFile, CancellationToken cancellationToken)
     {

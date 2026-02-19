@@ -20,7 +20,7 @@ public sealed class GetHeaderFilesQuery : IRequest<GetHeaderFilesResponse>
     {
         public async Task<GetHeaderFilesResponse> Handle(GetHeaderFilesQuery request, CancellationToken cancellationToken)
         {
-            var headersFiles = await dbContext.TestGroups
+            var headersFiles = await dbContext.HeaderFiles
                 .ProjectTo<HeaderFileDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
