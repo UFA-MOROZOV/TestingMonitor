@@ -11,6 +11,7 @@ using TestingMonitor.Application.UseCases.Tests.Groups.Create;
 using TestingMonitor.Application.UseCases.Tests.Groups.Delete;
 using TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 using TestingMonitor.Application.UseCases.Tests.UpdateHeaderFiles;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TestingMonitor.Api.Controllers;
 
@@ -53,7 +54,11 @@ public sealed class TestsController(IMediator mediator) : Controller
     [HttpDelete("/api/tests/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteTest(Guid id, CancellationToken cancellationToken)
-        => await mediator.Send(new TestToDeleteCommand(id), cancellationToken);
+    {
+        await mediator.Send(new TestToDeleteCommand(id), cancellationToken);
+
+        return NoContent();
+    }
 
     /// <summary>
     /// Обновление header файлов теста.
@@ -61,7 +66,11 @@ public sealed class TestsController(IMediator mediator) : Controller
     [HttpPut("/api/tests/headerFiles")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> UpdateHeaderFiles(TestToUpdateHeaderFilesCommand command, CancellationToken cancellationToken)
-        => await mediator.Send(command, cancellationToken); 
+    {
+        await mediator.Send(command, cancellationToken);
+
+        return NoContent();
+    }
 
     #region Groups
 
@@ -69,10 +78,14 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// Создание группы тестов.
     /// </summary>
     [HttpPost("/api/testGroup")]
-    [ProducesResponseType<Guid>(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Guid>> CreateTestGroup(TestGroupToCreateCommand command,
         CancellationToken cancellationToken)
-        => await mediator.Send(command, cancellationToken);
+    {
+        await mediator.Send(command, cancellationToken);
+
+        return NoContent();
+    }
 
     /// <summary>
     /// Удаление группы тестов.
@@ -81,7 +94,11 @@ public sealed class TestsController(IMediator mediator) : Controller
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteTestGroup(Guid id,
         CancellationToken cancellationToken)
-        => await mediator.Send(new TestGroupToDeleteCommand(id), cancellationToken);
+    {
+        await mediator.Send(new TestGroupToDeleteCommand(id), cancellationToken);
+
+        return NoContent();
+    }
 
     /// <summary>
     /// Загрузка группы тестов через зип.
@@ -140,7 +157,11 @@ public sealed class TestsController(IMediator mediator) : Controller
     [HttpDelete("/api/tests/headerFiles/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteHeaderFile(Guid id, CancellationToken cancellationToken)
-        => await mediator.Send(new HeaderFileToDeleteCommand(id), cancellationToken);
+    {
+        await mediator.Send(new HeaderFileToDeleteCommand(id), cancellationToken);
+
+        return NoContent();
+    }
 
     #endregion
 }

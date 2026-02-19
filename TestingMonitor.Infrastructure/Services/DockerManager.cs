@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Text.Json;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -7,7 +8,7 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Services;
 
-internal sealed class DockerExecutor : IDockerManager
+internal sealed class DockerManager : IDockerManager
 {
     private DockerClient Client { get; set; } = new DockerClientConfiguration(
             new Uri("npipe://./pipe/docker_engine"))
@@ -21,6 +22,21 @@ internal sealed class DockerExecutor : IDockerManager
         public double MemoryLimitMB { get; set; }
         public double MemoryPercentage { get; set; }
         public DateTime Timestamp { get; set; }
+    }
+
+    #region public
+
+    public async Task<bool> ImageExistsAsync(string imageName, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Client.Images.InspectImageAsync(imageName);
+            return true;
+        }
+        catch (DockerImageNotFoundException)
+        {
+            return false;
+        }
     }
 
     public async Task<bool> LoadDockerImageAsync(Stream tarStream, CancellationToken cancellationToken)
@@ -47,7 +63,6 @@ internal sealed class DockerExecutor : IDockerManager
         var deleteParams = new ImageDeleteParameters
         {
             Force = false,
-
         };
 
         try
@@ -145,6 +160,26 @@ internal sealed class DockerExecutor : IDockerManager
             await Cleanup(containerId);
         }
     }
+
+    public async Task<Dictionary<string, bool>> CheckDockersAsync(List<string> imageNames, CancellationToken cancellationToken)
+    {
+        var dockerExistence = new Dictionary<string, bool>();
+
+        var images = await Client.Images.ListImagesAsync(new ImagesListParameters(), cancellationToken);
+
+        var repoTags = images
+            .SelectMany(x => x.RepoTags)
+            .ToList();
+
+        foreach (var imageName in imageNames)
+        {
+            dockerExistence.Add(imageName, repoTags.Contains(imageName));
+        }
+
+        return dockerExistence;
+    }
+
+    #endregion
 
     #region private
 

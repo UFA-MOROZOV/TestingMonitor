@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 
-namespace TestingMonitor.Application.UseCases.Compilers.Delete;
+namespace TestingMonitor.Application.UseCases.Compilers.DeleteImage;
 
 /// <summary>
-/// Обработчик удаления компилятора.
+/// Обработчик удаления образа компилятора.
 /// </summary>
-internal sealed class CompilerToDeleteHandler (IDockerManager dockerManager, IDbContext dbContext) 
-    : IRequestHandler<CompilerToDeleteCommand, Unit>
+internal sealed class CompilerToDeleteImageHandler (IDockerManager dockerManager, IDbContext dbContext) 
+    : IRequestHandler<CompilerToDeleteImageCommand, Unit>
 {
-    public async Task<Unit> Handle(CompilerToDeleteCommand command, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CompilerToDeleteImageCommand command, CancellationToken cancellationToken)
     {
         var compiler = await dbContext.Compilers
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
@@ -19,6 +19,11 @@ internal sealed class CompilerToDeleteHandler (IDockerManager dockerManager, IDb
         if (compiler == null)
         {
             throw new ApiException("Компилятор с такими данными не существует.");
+        }
+
+        if (!compiler.HasDockerLocally)
+        {
+            return Unit.Value;
         }
 
         if (compiler.HasDockerLocally && await dockerManager.ImageExistsAsync(compiler.ImageName, cancellationToken))
@@ -29,8 +34,7 @@ internal sealed class CompilerToDeleteHandler (IDockerManager dockerManager, IDb
             }
         }
 
-        dbContext.Compilers.Remove(compiler);
-
+        compiler.HasDockerLocally = false;
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
