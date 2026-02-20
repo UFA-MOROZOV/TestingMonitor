@@ -19,4 +19,14 @@ public sealed class HeaderFile
     /// Путь до файла.
     /// </summary>
     public string Path { get; set; } = null!;
+
+    /// <summary>
+    /// Группы тестов.
+    /// </summary>
+    public ICollection<TestGroupToHeaderFile> TestGroups { get; set; } = [];
+
+    /// <summary>
+    /// Тесты.
+    /// </summary>
+    public ICollection<TestToHeaderFile> Tests { get; set; } = [];
 }

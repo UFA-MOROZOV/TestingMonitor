@@ -33,7 +33,7 @@ public sealed class TestGroup
     /// <summary>
     /// Файлы header.
     /// </summary>
-    public ICollection<HeaderFile> HeaderFiles { get; set; } = [];
+    public ICollection<TestGroupToHeaderFile> HeaderFiles { get; set; } = [];
 
     /// <summary>
     /// Подгруппы.

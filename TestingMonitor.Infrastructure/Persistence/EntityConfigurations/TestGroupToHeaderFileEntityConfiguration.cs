@@ -4,24 +4,24 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Persistence.EntityConfigurations;
 
-internal sealed class TestToHeaderFileEntityConfiguration : IEntityTypeConfiguration<TestToHeaderFile>
+internal sealed class TestGroupToHeaderFileEntityConfiguration : IEntityTypeConfiguration<TestGroupToHeaderFile>
 {
-    public void Configure(EntityTypeBuilder<TestToHeaderFile> builder)
+    public void Configure(EntityTypeBuilder<TestGroupToHeaderFile> builder)
     {
         builder.HasKey(x => new
         {
             x.HeaderId,
-            x.TestId
+            x.TestGroupId
         });
 
         builder.HasOne(x => x.HeaderFile)
-            .WithMany(x => x.Tests)
+            .WithMany(x => x.TestGroups)
             .HasForeignKey(x => x.HeaderId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(x => x.Test)
+        builder.HasOne(x => x.TestGroup)
             .WithMany(x => x.HeaderFiles)
-            .HasForeignKey(x => x.TestId)   
+            .HasForeignKey(x => x.TestGroupId)   
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

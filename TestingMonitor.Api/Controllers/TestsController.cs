@@ -9,9 +9,9 @@ using TestingMonitor.Application.UseCases.Tests.Delete;
 using TestingMonitor.Application.UseCases.Tests.Get;
 using TestingMonitor.Application.UseCases.Tests.Groups.Create;
 using TestingMonitor.Application.UseCases.Tests.Groups.Delete;
+using TestingMonitor.Application.UseCases.Tests.Groups.UpdateHeaderFiles;
 using TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 using TestingMonitor.Application.UseCases.Tests.UpdateHeaderFiles;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TestingMonitor.Api.Controllers;
 
@@ -117,6 +117,19 @@ public sealed class TestsController(IMediator mediator) : Controller
         };
 
         return await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Обновление header файлов группы тестов.
+    /// </summary>
+    [HttpPut("/api/testsgroups/headerFiles")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult<Unit>> UpdateGroupHeaderFiles(TestGroupToUpdateHeaderFilesCommand command,
+        CancellationToken cancellationToken)
+    {
+        await mediator.Send(command, cancellationToken);
+
+        return NoContent();
     }
 
     #endregion

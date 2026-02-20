@@ -16,24 +16,47 @@ public sealed class GetHeaderFilesQuery : IRequest<GetHeaderFilesResponse>
     /// </summary>
     public string? Search { get; set; }
 
+    /// <summary>
+    /// Идентификатор группы тестов.
+    /// </summary>
+    public Guid? TestGroupId { get; set; }
+
+    /// <summary>
+    /// Идентификатор теста.
+    /// </summary>
+    public Guid? TestId { get; set; }
+
     private class Handler(IDbContext dbContext, IMapper mapper) : IRequestHandler<GetHeaderFilesQuery, GetHeaderFilesResponse>
     {
         public async Task<GetHeaderFilesResponse> Handle(GetHeaderFilesQuery request, CancellationToken cancellationToken)
         {
-            var headersFiles = await dbContext.HeaderFiles
-                .ProjectTo<HeaderFileDto>(mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+            var headersFileQyery = dbContext.HeaderFiles.AsQueryable();
 
             if (request.Search != null)
             {
-                headersFiles = headersFiles
-                    .Where(x => x.Name.Contains(request.Search, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                headersFileQyery = headersFileQyery
+                    .Where(x => x.Name.Contains(request.Search, StringComparison.OrdinalIgnoreCase));
             }
+            
+            if (request.TestGroupId != null)
+            {
+                headersFileQyery = headersFileQyery
+                    .Where(x => x.TestGroups.Any(y => y.TestGroupId == request.TestGroupId));
+            }
+
+            if (request.TestId != null)
+            {
+                headersFileQyery = headersFileQyery
+                    .Where(x => x.Tests.Any(y => y.TestId == request.TestId));
+            }
+
+            var headerFiles = await headersFileQyery
+                .ProjectTo<HeaderFileDto>(mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
             return new GetHeaderFilesResponse
             {
-                HeaderFiles = headersFiles,
+                HeaderFiles = headerFiles,
             };
         }
     }
