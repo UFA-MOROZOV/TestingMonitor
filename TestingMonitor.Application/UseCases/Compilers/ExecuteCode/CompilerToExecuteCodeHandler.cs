@@ -22,7 +22,7 @@ internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDocke
             throw new ApiException("No compiler found"); 
         }
 
-        var output = await dockerManager.ExecuteCodeAsync(compiler, command.Code, cancellationToken);
+        var output = await dockerManager.ExecuteCodeAsync(compiler, Guid.NewGuid(), command.Code, cancellationToken);
 
         return output;
     }

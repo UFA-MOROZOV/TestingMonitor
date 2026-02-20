@@ -77,7 +77,7 @@ internal sealed class DockerManager : IDockerManager
         }
     }
 
-    public async Task<string> ExecuteCodeAsync(Compiler compiler, string code, CancellationToken cancellationToken)
+    public async Task<string> ExecuteCodeAsync(Compiler compiler, Guid runId, string code, CancellationToken cancellationToken)
     {
         if (!Directory.Exists(TempPath))
         {
@@ -85,21 +85,48 @@ internal sealed class DockerManager : IDockerManager
         }
 
         var fileName = $"{Guid.NewGuid()}.cpp";
-        var filePath = Path.Combine(TempPath, fileName);
-        var compiledPath = Path.Combine(TempPath, Path.GetFileNameWithoutExtension(fileName));
+        var filePath = Path.Combine(TempPath, runId.ToString(), fileName);
+        var compiledPath = Path.Combine(TempPath, runId.ToString(), Path.GetFileNameWithoutExtension(fileName));
 
         await File.WriteAllTextAsync(filePath, code, cancellationToken);
 
-        var output = await ExecuteAsync(compiler, fileName, cancellationToken);
+        var output = await ExecuteAsync(compiler, runId, fileName, cancellationToken);
 
         File.Delete(filePath);
         File.Delete(compiledPath);
 
         return output;
-
     }
 
-    public async Task<string> ExecuteAsync(Compiler compiler, string fileName, CancellationToken cancellationToken)
+    public async Task<string> ExecuteCodeAsync(Compiler compiler, Guid runId, Test test, List<HeaderFile> headers,
+        CancellationToken cancellationToken)
+    {
+        if (!Directory.Exists(TempPath))
+        {
+            Directory.CreateDirectory(TempPath);
+        }
+
+        var folder = Path.Combine(TempPath, runId.ToString());
+
+        var filePath = Path.Combine(folder, test.Name);
+
+        File.Copy(test.Path, filePath);
+
+        foreach (var header in headers)
+        {
+            var headerPath = Path.Combine(folder, header!.Name);
+
+            File.Copy(header.Path, headerPath);
+        }
+
+        var output = await ExecuteAsync(compiler, runId, test.Name, cancellationToken);
+
+        Directory.Delete(folder);
+
+        return output;
+    }
+
+    public async Task<string> ExecuteAsync(Compiler compiler, Guid runId, string fileName, CancellationToken cancellationToken)
     {
         var nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
@@ -108,13 +135,13 @@ internal sealed class DockerManager : IDockerManager
         var config = new CreateContainerParameters
         {
             Image = compiler.ImageName,
-            Cmd = [compiler.CommandName, $"/src/{fileName}", "-o", $"/src/{nameWithoutExtension}"],
+            Cmd = [compiler.CommandName, $"/src/{fileName}","-I", "src", "-o", $"/src/{nameWithoutExtension}"],
             WorkingDir = "/src",
             HostConfig = new HostConfig
             {
                 Binds =
                 [
-                    $"{fullPath}:/src:rw"
+                    $"{fullPath}/{runId}:/src:rw"
                 ],
                 Memory = 1024 * 1024 * 1024,
             },
