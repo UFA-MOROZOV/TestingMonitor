@@ -42,7 +42,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         {
             Stream = stream,
             GroupId = groupId,
-            Name = file.Name,
+            Name = file.FileName,
         };
 
         return await mediator.Send(command, cancellationToken);
@@ -158,7 +158,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         var command = new HeaderFileToCreateCommand
         {
             Stream = stream,
-            Name = file.Name,
+            Name = file.FileName,
         };
 
         return await mediator.Send(command, cancellationToken);

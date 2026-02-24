@@ -7,6 +7,7 @@ using TestingMonitor.Application.UseCases.Compilers.Delete;
 using TestingMonitor.Application.UseCases.Compilers.DeleteImage;
 using TestingMonitor.Application.UseCases.Compilers.DownloadDocker;
 using TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
+using TestingMonitor.Application.UseCases.Compilers.ExecuteTests;
 using TestingMonitor.Application.UseCases.Compilers.Get;
 using TestingMonitor.Application.UseCases.Compilers.Update;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -84,6 +85,14 @@ public sealed class CompilersController(IMediator mediator) : Controller
     [HttpPost("/api/compilers/execute")]
     [ProducesResponseType<string>(StatusCodes.Status200OK)]
     public async Task<ActionResult<string>> ExecuteCode([FromBody] CompilerToExecuteCodeCommand command, CancellationToken cancellationToken)
+        => await mediator.Send(command, cancellationToken);
+
+    /// <summary>
+    /// Выполнение кода компилятором.
+    /// </summary>
+    [HttpPost("/api/compilers/executeTask")]
+    [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Guid>> ExecuteTask([FromBody] CompilerToExecuteTestCommand command, CancellationToken cancellationToken)
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>

@@ -20,6 +20,8 @@ public static class DependencyInjection
         services.AddSingleton<IDockerManager, DockerManager>();
         services.AddHostedService<DockerExistenceMonitor>();
         services.AddTransient<IFileProvider, FileProvider>();
+        services.AddHostedService<ExecutionMonitor>();
+        services.AddTransient<TaskExecutor>();
     }
 }
 

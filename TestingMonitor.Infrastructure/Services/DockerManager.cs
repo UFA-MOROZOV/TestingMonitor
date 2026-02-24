@@ -108,6 +108,11 @@ internal sealed class DockerManager : IDockerManager
 
         var folder = Path.Combine(TempPath, runId.ToString());
 
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
         var filePath = Path.Combine(folder, test.Name);
 
         File.Copy(test.Path, filePath);
@@ -121,7 +126,7 @@ internal sealed class DockerManager : IDockerManager
 
         var output = await ExecuteAsync(compiler, runId, test.Name, cancellationToken);
 
-        Directory.Delete(folder);
+        Directory.Delete(folder, recursive: true);
 
         return output;
     }

@@ -15,5 +15,9 @@ public interface IDbContext
 
     DbSet<HeaderFile> HeaderFiles { get; }
 
+    DbSet<ExecutionTask> ExecutionTasks { get; }
+
+    DbSet<TestExecution> TestExecutions { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
