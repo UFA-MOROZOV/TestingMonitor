@@ -26,5 +26,7 @@ public class MappingProfile : Profile
 
         CreateMap<CompilerTask, CompilerTaskDto>()
             .ForMember(x => x.IsCompleted, x => x.MapFrom(y => y.DateOfCompletion != null));
+
+        CreateMap<TestExecution, TestExecutionDto>();
     }
 }

@@ -46,10 +46,10 @@ public sealed class GetCompilerTaskByIdResponse
     /// <summary>
     /// Выполненные тесты.
     /// </summary>
-    public ICollection<TaskExecutionDto> TestsExecuted { get; set; } = [];
+    public ICollection<TestExecutionDto> TestsExecuted { get; set; } = [];
 }
 
-public sealed class TaskExecutionDto
+public sealed class TestExecutionDto
 {
     /// <summary>
     /// Тест.
