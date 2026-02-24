@@ -12,8 +12,8 @@ using TestingMonitor.Infrastructure.Persistence;
 namespace TestingMonitor.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260218101004_AddHeaders")]
-    partial class AddHeaders
+    [Migration("20260224201236_LargeUpdate")]
+    partial class LargeUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,45 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.ToTable("Compilers");
                 });
 
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.CompilerTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CompilerId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("DateOfCompletion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateOfStart")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("TestGroupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TestId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompilerId");
+
+                    b.HasIndex("TestGroupId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("CompilerTasks");
+                });
+
             modelBuilder.Entity("TestingMonitor.Domain.Entities.HeaderFile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -74,12 +113,10 @@ namespace TestingMonitor.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("TestGroupId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TestGroupId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("HeaderFiles");
                 });
@@ -108,6 +145,36 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.ToTable("Tests");
                 });
 
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.TestExecution", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CompilerTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("interval");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsSuccessful")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("TestId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompilerTaskId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("TestExecutions");
+                });
+
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -128,6 +195,21 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.ToTable("TestGroups");
                 });
 
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.TestGroupToHeaderFile", b =>
+                {
+                    b.Property<Guid>("HeaderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TestGroupId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("HeaderId", "TestGroupId");
+
+                    b.HasIndex("TestGroupId");
+
+                    b.ToTable("TestGroupToHeaderFile");
+                });
+
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestToHeaderFile", b =>
                 {
                     b.Property<Guid>("HeaderId")
@@ -143,11 +225,29 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.ToTable("TestToHeaderFiles");
                 });
 
-            modelBuilder.Entity("TestingMonitor.Domain.Entities.HeaderFile", b =>
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.CompilerTask", b =>
                 {
-                    b.HasOne("TestingMonitor.Domain.Entities.TestGroup", null)
-                        .WithMany("HeaderFiles")
-                        .HasForeignKey("TestGroupId");
+                    b.HasOne("TestingMonitor.Domain.Entities.Compiler", "Compiler")
+                        .WithMany()
+                        .HasForeignKey("CompilerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TestingMonitor.Domain.Entities.TestGroup", "TestGroup")
+                        .WithMany()
+                        .HasForeignKey("TestGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TestingMonitor.Domain.Entities.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Compiler");
+
+                    b.Navigation("Test");
+
+                    b.Navigation("TestGroup");
                 });
 
             modelBuilder.Entity("TestingMonitor.Domain.Entities.Test", b =>
@@ -160,6 +260,24 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.Navigation("TestGroup");
                 });
 
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.TestExecution", b =>
+                {
+                    b.HasOne("TestingMonitor.Domain.Entities.CompilerTask", "CompilerTask")
+                        .WithMany("TestsExecuted")
+                        .HasForeignKey("CompilerTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TestingMonitor.Domain.Entities.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("CompilerTask");
+
+                    b.Navigation("Test");
+                });
+
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestGroup", b =>
                 {
                     b.HasOne("TestingMonitor.Domain.Entities.TestGroup", "ParentGroup")
@@ -170,10 +288,29 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.Navigation("ParentGroup");
                 });
 
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.TestGroupToHeaderFile", b =>
+                {
+                    b.HasOne("TestingMonitor.Domain.Entities.HeaderFile", "HeaderFile")
+                        .WithMany("TestGroups")
+                        .HasForeignKey("HeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TestingMonitor.Domain.Entities.TestGroup", "TestGroup")
+                        .WithMany("HeaderFiles")
+                        .HasForeignKey("TestGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HeaderFile");
+
+                    b.Navigation("TestGroup");
+                });
+
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestToHeaderFile", b =>
                 {
                     b.HasOne("TestingMonitor.Domain.Entities.HeaderFile", "HeaderFile")
-                        .WithMany()
+                        .WithMany("Tests")
                         .HasForeignKey("HeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -187,6 +324,18 @@ namespace TestingMonitor.Infrastructure.Migrations
                     b.Navigation("HeaderFile");
 
                     b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.CompilerTask", b =>
+                {
+                    b.Navigation("TestsExecuted");
+                });
+
+            modelBuilder.Entity("TestingMonitor.Domain.Entities.HeaderFile", b =>
+                {
+                    b.Navigation("TestGroups");
+
+                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("TestingMonitor.Domain.Entities.Test", b =>
