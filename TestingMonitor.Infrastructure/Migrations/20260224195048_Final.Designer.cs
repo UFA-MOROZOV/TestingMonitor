@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestingMonitor.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TestingMonitor.Infrastructure.Persistence;
 namespace TestingMonitor.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260224195048_Final")]
+    partial class Final
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,14 +147,14 @@ namespace TestingMonitor.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompilerTaskId")
-                        .HasColumnType("uuid");
-
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("interval");
+                    b.Property<int>("DurationInSeconds")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ErrorMessage")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("ExecutionTaskId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsSuccessful")
                         .HasColumnType("boolean");
@@ -161,7 +164,7 @@ namespace TestingMonitor.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompilerTaskId");
+                    b.HasIndex("ExecutionTaskId");
 
                     b.HasIndex("TestId");
 
@@ -255,9 +258,9 @@ namespace TestingMonitor.Infrastructure.Migrations
 
             modelBuilder.Entity("TestingMonitor.Domain.Entities.TestExecution", b =>
                 {
-                    b.HasOne("TestingMonitor.Domain.Entities.CompilerTask", "CompilerTask")
+                    b.HasOne("TestingMonitor.Domain.Entities.CompilerTask", "ExecutionTask")
                         .WithMany("TestsExecuted")
-                        .HasForeignKey("CompilerTaskId")
+                        .HasForeignKey("ExecutionTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -266,7 +269,7 @@ namespace TestingMonitor.Infrastructure.Migrations
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("CompilerTask");
+                    b.Navigation("ExecutionTask");
 
                     b.Navigation("Test");
                 });

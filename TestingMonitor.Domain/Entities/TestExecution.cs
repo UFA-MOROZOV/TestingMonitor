@@ -13,12 +13,12 @@ public sealed class TestExecution
     /// <summary>
     /// Идентификатор на выполнение.
     /// </summary>
-    public Guid ExecutionTaskId { get; set; }
+    public Guid CompilerTaskId { get; set; }
 
     /// <summary>
     /// Задача на выполнение.
     /// </summary>
-    public CompilerTask? ExecutionTask { get; set; }
+    public CompilerTask? CompilerTask { get; set; }
 
     /// <summary>
     /// Идентификатор теста.
@@ -31,9 +31,9 @@ public sealed class TestExecution
     public Test? Test { get; set; }
 
     /// <summary>
-    /// Время выполнения в секундах.
+    /// Время выполнения.
     /// </summary>
-    public int DurationInSeconds { get; set; }
+    public TimeSpan Duration { get; set; }
 
     /// <summary>
     /// Успешно ли.

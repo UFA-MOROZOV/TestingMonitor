@@ -1,4 +1,4 @@
-﻿namespace TestingMonitor.Application.UseCases.TaskExecutions.Get;
+﻿namespace TestingMonitor.Application.UseCases.CompilerTasks.Get;
 
 /// <summary>
 /// Задача.
@@ -8,7 +8,7 @@ public sealed class CompilerTaskDto
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Имя.

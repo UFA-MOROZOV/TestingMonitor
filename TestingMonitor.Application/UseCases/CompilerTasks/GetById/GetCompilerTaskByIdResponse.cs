@@ -1,7 +1,7 @@
 ﻿using TestingMonitor.Application.UseCases.Models;
 using TestingMonitor.Domain.Entities;
 
-namespace TestingMonitor.Application.UseCases.CompilerTask.GetById;
+namespace TestingMonitor.Application.UseCases.CompilerTasks.GetById;
 
 /// <summary>
 /// Результат получения задачи компилятора.
@@ -21,7 +21,7 @@ public sealed class GetCompilerTaskByIdResponse
     /// <summary>
     /// Компилятор.
     /// </summary>
-    public CompilerDto Compiler { get; set; }
+    public CompilerDto Compiler { get; set; } = null!;
 
     /// <summary>
     /// Дата создания.
@@ -62,4 +62,27 @@ public sealed class GetCompilerTaskByIdResponse
     /// Выполненные тесты.
     /// </summary>
     public ICollection<TestExecution> TestsExecuted { get; set; } = [];
+}
+
+public sealed class TaskExecutionDto
+{
+    /// <summary>
+    /// Тест.
+    /// </summary>
+    public TestItemDto? Test { get; set; }
+
+    /// <summary>
+    /// Время выполнения.
+    /// </summary>
+    public TimeSpan Duration { get; set; }
+
+    /// <summary>
+    /// Успешно ли.
+    /// </summary>
+    public bool IsSuccessful { get; set; }
+
+    /// <summary>
+    /// Сообщение об ошибке.
+    /// </summary>
+    public string? ErrorMessage { get; set; }
 }

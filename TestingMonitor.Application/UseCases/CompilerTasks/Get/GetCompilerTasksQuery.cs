@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TestingMonitor.Application.Interfaces;
 
-namespace TestingMonitor.Application.UseCases.TaskExecutions.Get;
+namespace TestingMonitor.Application.UseCases.CompilerTasks.Get;
 
 /// <summary>
 /// Запрос на получение компиляторов.

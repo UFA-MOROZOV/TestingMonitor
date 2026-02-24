@@ -73,10 +73,10 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
         var testExecution = new TestExecution
         {
             Id = testRunId,
-            ExecutionTaskId = taskId,
+            CompilerTaskId = taskId,
             TestId = testId,
             ErrorMessage = output.Message,
-            DurationInSeconds = output.Duration.Seconds,
+            Duration = output.Duration,
             IsSuccessful = string.IsNullOrEmpty(output.Message),
         };
 

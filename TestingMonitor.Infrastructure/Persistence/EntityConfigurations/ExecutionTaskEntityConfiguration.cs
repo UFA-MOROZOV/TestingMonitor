@@ -15,9 +15,9 @@ internal sealed class TestExecutionEntityConfiguration : IEntityTypeConfiguratio
             .HasForeignKey(x => x.TestId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(x => x.ExecutionTask)
+        builder.HasOne(x => x.CompilerTask)
             .WithMany(x => x.TestsExecuted)
-            .HasForeignKey(x => x.ExecutionTaskId)
+            .HasForeignKey(x => x.CompilerTaskId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
