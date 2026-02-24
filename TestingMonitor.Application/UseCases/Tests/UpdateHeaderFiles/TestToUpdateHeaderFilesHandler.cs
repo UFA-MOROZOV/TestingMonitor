@@ -35,7 +35,7 @@ internal sealed class TestToUpdateHeaderFilesHandler(IDbContext dbContext) : IRe
             .Where(x => existingHeaders.Contains(x.HeaderId))
             .ToList();
 
-        var headersToAdd = request.HeaderIds.Except(existingHeaders);
+        var headersToAdd = request.HeaderIds.Except(test.HeaderFiles.Select(x => x.HeaderId));
 
         foreach (var header in headersToAdd)
         {

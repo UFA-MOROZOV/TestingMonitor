@@ -9,5 +9,8 @@ internal sealed class HeaderFileEntityConfiguration : IEntityTypeConfiguration<H
     public void Configure(EntityTypeBuilder<HeaderFile> builder)
     {
         builder.HasKey(x => x.Id);
+
+        builder.HasIndex(x => x.Name)
+            .IsUnique();
     }
 }

@@ -16,4 +16,9 @@
     <ProjectReference Include="..\TestingMonitor.Domain\TestingMonitor.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\TaskExecutions\Get\" />
+    <Folder Include="UseCases\TaskExecutions\GetById\" />
+  </ItemGroup>
+
 </Project>

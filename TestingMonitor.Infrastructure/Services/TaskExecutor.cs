@@ -63,7 +63,7 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
             .Distinct();
 
         var headers = await dbContext.HeaderFiles
-            .Where(x => testHeaderIds.Contains(testId))
+            .Where(x => testHeaderIds.Contains(x.Id))
             .ToListAsync(cancellationToken);
 
         var testRunId = Guid.NewGuid();
@@ -76,7 +76,7 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
             ExecutionTaskId = taskId,
             TestId = testId,
             ErrorMessage = output,
-            IsSuccessful = output == null,
+            IsSuccessful = output == string.Empty,
         };
 
         await dbContext.TestExecutions.AddAsync(testExecution, cancellationToken);
@@ -104,7 +104,7 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
             .ToList();
 
         var headers = await dbContext.HeaderFiles
-            .Where(x => testHeaderIds.Contains(testGroupId))
+            .Where(x => testHeaderIds.Contains(x.Id))
             .ToListAsync(cancellationToken);
 
         foreach (var test in testGroup.Tests)
