@@ -5,6 +5,7 @@ using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Infrastructure.Extensions;
 using TestingMonitor.Infrastructure.Persistence;
 using TestingMonitor.Infrastructure.Services;
+using TestingMonitor.Infrastructure.Services.Background;
 
 namespace TestingMonitor.Infrastructure;
 
@@ -16,8 +17,11 @@ public static class DependencyInjection
             options => options.UseNpgsql(configuration.GetConnectionString("MainDb")));
 
         services.AddScoped<AppDbContextInitializer>();
-        services.AddSingleton<IDockerExecutor, DockerExecutor>();
+        services.AddSingleton<IDockerManager, DockerManager>();
+        services.AddHostedService<DockerExistenceMonitor>();
         services.AddTransient<IFileProvider, FileProvider>();
+        services.AddHostedService<ExecutionMonitor>();
+        services.AddTransient<TaskExecutor>();
     }
 }
 

@@ -8,17 +8,22 @@ namespace TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
 /// <summary>
 /// Обработчик выполнения кода компилятором.
 /// </summary>
-internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDockerExecutor dockerExecutor)
+internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDockerManager dockerManager)
     : IRequestHandler<CompilerToExecuteCodeCommand, string>
 {
     /// <inheritdoc/>
     public async Task<string> Handle(CompilerToExecuteCodeCommand command, CancellationToken cancellationToken)
     {
         var compiler = await dbContext.Compilers
-            .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken) ?? throw new ApiException("Компилятор не найден");
+            .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
-        var output = await dockerExecutor.ExecuteCodeAsync(compiler, command.Code, cancellationToken);
+        if (compiler == null)
+        {
+            throw new ApiException("No compiler found"); 
+        }
 
-        return output;
+        var output = await dockerManager.ExecuteCodeAsync(compiler, Guid.NewGuid(), command.Code, cancellationToken);
+
+        return output.Message;
     }
 }

@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TestingMonitor.Api.Middlewares;
@@ -41,6 +42,16 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
           }
         });
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 1_000_000_000;
+});
+
+builder.WebHost.UseKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 1_000_000_000;
 });
 
 builder.Services.AddInfrastructureDI(builder.Configuration);

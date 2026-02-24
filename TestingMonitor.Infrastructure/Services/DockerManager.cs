@@ -1,20 +1,22 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Text.Json;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Application.Interfaces.Models;
 using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Services;
 
-internal sealed class DockerExecutor : IDockerExecutor
+internal sealed class DockerManager : IDockerManager
 {
     private DockerClient Client { get; set; } = new DockerClientConfiguration(
             new Uri("npipe://./pipe/docker_engine"))
             .CreateClient();
     private string TempPath { get; set; } = "temp";
 
-    public class ContainerStatsData
+    public sealed class ContainerStatsData
     {
         public double CpuPercentage { get; set; }
         public double MemoryUsageMB { get; set; }
@@ -23,7 +25,60 @@ internal sealed class DockerExecutor : IDockerExecutor
         public DateTime Timestamp { get; set; }
     }
 
-    public async Task<string> ExecuteCodeAsync(Compiler compiler, string code, CancellationToken cancellationToken)
+    #region public
+
+    public async Task<bool> ImageExistsAsync(string imageName, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Client.Images.InspectImageAsync(imageName);
+            return true;
+        }
+        catch (DockerImageNotFoundException)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> LoadDockerImageAsync(Stream tarStream, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var parameters = new ImageLoadParameters
+            {
+                Quiet = false
+            };
+
+            await Client.Images.LoadImageAsync(parameters, tarStream, new Progress<JSONMessage>(), cancellationToken);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteDockerImageAsync(Compiler compiler, CancellationToken cancellationToken)
+    {
+        var deleteParams = new ImageDeleteParameters
+        {
+            Force = false,
+        };
+
+        try
+        {
+            await Client.Images.DeleteImageAsync(compiler.ImageName, deleteParams, cancellationToken);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, string code, CancellationToken cancellationToken)
     {
         if (!Directory.Exists(TempPath))
         {
@@ -31,21 +86,53 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
 
         var fileName = $"{Guid.NewGuid()}.cpp";
-        var filePath = Path.Combine(TempPath, fileName);
-        var compiledPath = Path.Combine(TempPath, Path.GetFileNameWithoutExtension(fileName));
+        var filePath = Path.Combine(TempPath, runId.ToString(), fileName);
+        var compiledPath = Path.Combine(TempPath, runId.ToString(), Path.GetFileNameWithoutExtension(fileName));
 
         await File.WriteAllTextAsync(filePath, code, cancellationToken);
 
-        var output = await ExecuteAsync(compiler, fileName, cancellationToken);
+        var result = await ExecuteAsync(compiler, runId, fileName, cancellationToken);
 
         File.Delete(filePath);
         File.Delete(compiledPath);
 
-        return output;
-
+        return result;
     }
 
-    public async Task<string> ExecuteAsync(Compiler compiler, string fileName, CancellationToken cancellationToken)
+    public async Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, Test test, List<HeaderFile> headers,
+        CancellationToken cancellationToken)
+    {
+        if (!Directory.Exists(TempPath))
+        {
+            Directory.CreateDirectory(TempPath);
+        }
+
+        var folder = Path.Combine(TempPath, runId.ToString());
+
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
+        var filePath = Path.Combine(folder, test.Name);
+
+        File.Copy(test.Path, filePath);
+
+        foreach (var header in headers)
+        {
+            var headerPath = Path.Combine(folder, header!.Name);
+
+            File.Copy(header.Path, headerPath);
+        }
+
+        var result = await ExecuteAsync(compiler, runId, test.Name, cancellationToken);
+
+        Directory.Delete(folder, recursive: true);
+
+        return result;
+    }
+
+    public async Task<ExecutionResult> ExecuteAsync(Compiler compiler, Guid runId, string fileName, CancellationToken cancellationToken)
     {
         var nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
@@ -53,14 +140,14 @@ internal sealed class DockerExecutor : IDockerExecutor
 
         var config = new CreateContainerParameters
         {
-            Image = $"{compiler.Name}:{compiler.Version}",
-            Cmd = [compiler.CommandName, $"/src/{fileName}", "-o", $"/src/{nameWithoutExtension}"],
+            Image = compiler.ImageName,
+            Cmd = [compiler.CommandName, $"/src/{fileName}","-I", "src", "-o", $"/src/{nameWithoutExtension}"],
             WorkingDir = "/src",
             HostConfig = new HostConfig
             {
                 Binds =
                 [
-                    $"{fullPath}:/src:rw"
+                    $"{fullPath}/{runId}:/src:rw"
                 ],
                 Memory = 1024 * 1024 * 1024,
             },
@@ -84,7 +171,6 @@ internal sealed class DockerExecutor : IDockerExecutor
             await Task.Delay(200, cancellationToken);
 
             var startTime = DateTime.UtcNow;
-            Console.WriteLine($"Starting compilation of {fileName}...");
 
             await Client.Containers.StartContainerAsync(containerId, new ContainerStartParameters(), cancellationToken);
 
@@ -93,19 +179,45 @@ internal sealed class DockerExecutor : IDockerExecutor
             cts.Cancel();
             try { await monitoringTask; } catch { }
 
-            Console.WriteLine($"\nCompilation completed in: {DateTime.UtcNow - startTime}");
+            var executionTime = DateTime.UtcNow - startTime;
 
             var logs = await GetContainerOutputAsync(containerId);
 
-            DisplayStatsSummary(statsHistory);
+            /*DisplayStatsSummary(statsHistory);*/
 
-            return logs;
+            return new ExecutionResult
+            {
+                Duration = executionTime,
+                Message = logs,
+            };
         }
         finally
         {
             await Cleanup(containerId);
         }
     }
+
+    public async Task<Dictionary<string, bool>> CheckDockersAsync(List<string> imageNames, CancellationToken cancellationToken)
+    {
+        var dockerExistence = new Dictionary<string, bool>();
+
+        var images = await Client.Images.ListImagesAsync(new ImagesListParameters(), cancellationToken);
+
+        var repoTags = images
+            .SelectMany(x => x.RepoTags)
+            .ToList();
+
+        foreach (var imageName in imageNames)
+        {
+            dockerExistence.Add(imageName, repoTags.Contains(imageName));
+        }
+
+        return dockerExistence;
+    }
+
+    #endregion
+
+    #region private
 
     [Obsolete]
     private async Task MonitorContainerStatsAsync(
@@ -237,7 +349,7 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
     }
 
-    private static void DisplayStatsSummary(List<ContainerStatsData> statsHistory)
+    /*private static void DisplayStatsSummary(List<ContainerStatsData> statsHistory)
     {
         if (statsHistory == null || statsHistory.Count == 0)
         {
@@ -263,7 +375,7 @@ internal sealed class DockerExecutor : IDockerExecutor
 
             DisplaySimpleCpuChart(cpuValues);
         }
-    }
+    }*/
 
     private static void DisplaySimpleCpuChart(List<double> cpuValues)
     {
@@ -404,7 +516,7 @@ internal sealed class DockerExecutor : IDockerExecutor
     {
         try
         {
-            var imageName = $"{compiler.Name}:{compiler.Version}";
+            var imageName = compiler.ImageName;
 
             var images = await Client.Images.ListImagesAsync(new ImagesListParameters
             {
@@ -428,11 +540,7 @@ internal sealed class DockerExecutor : IDockerExecutor
 
             var progress = new Progress<JSONMessage>(message =>
             {
-                if (!string.IsNullOrEmpty(message.Status))
-                {
-                    Console.WriteLine($"Docker: {message.Status} {message.ProgressMessage ?? ""}");
-                }
-                else if (!string.IsNullOrEmpty(message.ErrorMessage))
+                if (!string.IsNullOrEmpty(message.ErrorMessage))
                 {
                     Console.WriteLine($"Docker Error: {message.ErrorMessage}");
                 }
@@ -457,7 +565,7 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
     }
 
-    public async Task Cleanup(string containerId)
+    private async Task Cleanup(string containerId)
     {
         try
         {
@@ -471,4 +579,6 @@ internal sealed class DockerExecutor : IDockerExecutor
         }
         catch { /* Потребуется возможное логирование */ }
     }
+
+    #endregion
 }
