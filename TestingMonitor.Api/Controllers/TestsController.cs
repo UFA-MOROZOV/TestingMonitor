@@ -116,7 +116,9 @@ public sealed class TestsController(IMediator mediator) : Controller
             GroupId = groupId,
         };
 
-        return await mediator.Send(command, cancellationToken);
+        await mediator.Send(command, cancellationToken);
+
+        return NoContent();
     }
 
     /// <summary>
