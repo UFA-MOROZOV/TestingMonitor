@@ -4,6 +4,7 @@ using System.Text.Json;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Application.Interfaces.Models;
 using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Services;
@@ -77,7 +78,7 @@ internal sealed class DockerManager : IDockerManager
         }
     }
 
-    public async Task<string> ExecuteCodeAsync(Compiler compiler, Guid runId, string code, CancellationToken cancellationToken)
+    public async Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, string code, CancellationToken cancellationToken)
     {
         if (!Directory.Exists(TempPath))
         {
@@ -90,15 +91,15 @@ internal sealed class DockerManager : IDockerManager
 
         await File.WriteAllTextAsync(filePath, code, cancellationToken);
 
-        var output = await ExecuteAsync(compiler, runId, fileName, cancellationToken);
+        var result = await ExecuteAsync(compiler, runId, fileName, cancellationToken);
 
         File.Delete(filePath);
         File.Delete(compiledPath);
 
-        return output;
+        return result;
     }
 
-    public async Task<string> ExecuteCodeAsync(Compiler compiler, Guid runId, Test test, List<HeaderFile> headers,
+    public async Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, Test test, List<HeaderFile> headers,
         CancellationToken cancellationToken)
     {
         if (!Directory.Exists(TempPath))
@@ -124,14 +125,14 @@ internal sealed class DockerManager : IDockerManager
             File.Copy(header.Path, headerPath);
         }
 
-        var output = await ExecuteAsync(compiler, runId, test.Name, cancellationToken);
+        var result = await ExecuteAsync(compiler, runId, test.Name, cancellationToken);
 
         Directory.Delete(folder, recursive: true);
 
-        return output;
+        return result;
     }
 
-    public async Task<string> ExecuteAsync(Compiler compiler, Guid runId, string fileName, CancellationToken cancellationToken)
+    public async Task<ExecutionResult> ExecuteAsync(Compiler compiler, Guid runId, string fileName, CancellationToken cancellationToken)
     {
         var nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 
@@ -170,7 +171,6 @@ internal sealed class DockerManager : IDockerManager
             await Task.Delay(200, cancellationToken);
 
             var startTime = DateTime.UtcNow;
-            Console.WriteLine($"Starting compilation of {fileName}...");
 
             await Client.Containers.StartContainerAsync(containerId, new ContainerStartParameters(), cancellationToken);
 
@@ -179,13 +179,17 @@ internal sealed class DockerManager : IDockerManager
             cts.Cancel();
             try { await monitoringTask; } catch { }
 
-            Console.WriteLine($"\nCompilation completed in: {DateTime.UtcNow - startTime}");
+            var executionTime = DateTime.UtcNow - startTime;
 
             var logs = await GetContainerOutputAsync(containerId);
 
-            DisplayStatsSummary(statsHistory);
+            /*DisplayStatsSummary(statsHistory);*/
 
-            return logs;
+            return new ExecutionResult
+            {
+                Duration = executionTime,
+                Message = logs,
+            };
         }
         finally
         {
@@ -345,7 +349,7 @@ internal sealed class DockerManager : IDockerManager
         }
     }
 
-    private static void DisplayStatsSummary(List<ContainerStatsData> statsHistory)
+    /*private static void DisplayStatsSummary(List<ContainerStatsData> statsHistory)
     {
         if (statsHistory == null || statsHistory.Count == 0)
         {
@@ -371,7 +375,7 @@ internal sealed class DockerManager : IDockerManager
 
             DisplaySimpleCpuChart(cpuValues);
         }
-    }
+    }*/
 
     private static void DisplaySimpleCpuChart(List<double> cpuValues)
     {

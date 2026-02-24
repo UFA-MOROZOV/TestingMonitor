@@ -24,6 +24,6 @@ internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDocke
 
         var output = await dockerManager.ExecuteCodeAsync(compiler, Guid.NewGuid(), command.Code, cancellationToken);
 
-        return output;
+        return output.Message;
     }
 }

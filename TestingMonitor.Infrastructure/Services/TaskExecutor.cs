@@ -75,8 +75,9 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
             Id = testRunId,
             ExecutionTaskId = taskId,
             TestId = testId,
-            ErrorMessage = output,
-            IsSuccessful = output == string.Empty,
+            ErrorMessage = output.Message,
+            DurationInSeconds = output.Duration.Seconds,
+            IsSuccessful = string.IsNullOrEmpty(output.Message),
         };
 
         await dbContext.TestExecutions.AddAsync(testExecution, cancellationToken);

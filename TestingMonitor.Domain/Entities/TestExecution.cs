@@ -33,7 +33,7 @@ public sealed class TestExecution
     /// <summary>
     /// Время выполнения в секундах.
     /// </summary>
-    public int TimeInSeconds { get; set; }
+    public int DurationInSeconds { get; set; }
 
     /// <summary>
     /// Успешно ли.
