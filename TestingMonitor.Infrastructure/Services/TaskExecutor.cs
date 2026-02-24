@@ -14,7 +14,7 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
     /// </summary>
     public async Task ExecuteTaskAsync(Guid taskId, CancellationToken cancellationToken)
     {
-        var task = await dbContext.ExecutionTasks
+        var task = await dbContext.CompilerTasks
             .FirstOrDefaultAsync(x => x.Id == taskId, cancellationToken);
 
         if (task == null)
@@ -41,7 +41,7 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
             await ExecuteTestGroupAsync(compiler, task.Id, task.TestGroupId.Value, [], cancellationToken);
         }
 
-        task.DateOfEnd = DateTime.UtcNow;
+        task.DateOfCompletion = DateTime.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
     }

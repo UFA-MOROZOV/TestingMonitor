@@ -28,7 +28,7 @@ internal sealed class AppDbContext : DbContext, IDbContext
 
     public DbSet<HeaderFile> HeaderFiles => Set<HeaderFile>();
 
-    public DbSet<ExecutionTask> ExecutionTasks => Set<ExecutionTask>();
+    public DbSet<CompilerTask> CompilerTasks => Set<CompilerTask>();
 
     public DbSet<TestExecution> TestExecutions => Set<TestExecution>();
 }

@@ -20,9 +20,9 @@ internal sealed class ExecutionMonitor(IServiceProvider serviceProvider, ILogger
 
                 var taskExecutor = scope.ServiceProvider.GetRequiredService<TaskExecutor>();
 
-                var task = await dbContext.ExecutionTasks
+                var task = await dbContext.CompilerTasks
                     .OrderBy(t => t.DateOfCreation)
-                    .Where(t => t.DateOfEnd == null)
+                    .Where(t => t.DateOfCompletion == null)
                     .FirstOrDefaultAsync(stoppingToken);
 
                 if (task != null)

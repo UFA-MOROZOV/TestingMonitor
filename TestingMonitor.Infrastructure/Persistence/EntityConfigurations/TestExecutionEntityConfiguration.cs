@@ -4,9 +4,9 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Persistence.EntityConfigurations;
 
-internal sealed class ExecutionTaskEntityConfiguration : IEntityTypeConfiguration<ExecutionTask>
+internal sealed class ExecutionTaskEntityConfiguration : IEntityTypeConfiguration<CompilerTask>
 {
-    public void Configure(EntityTypeBuilder<ExecutionTask> builder)
+    public void Configure(EntityTypeBuilder<CompilerTask> builder)
     {
         builder.HasKey(x => x.Id);
 

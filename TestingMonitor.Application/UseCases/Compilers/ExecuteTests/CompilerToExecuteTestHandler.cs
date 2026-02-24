@@ -33,7 +33,7 @@ internal sealed class CompilerToExecuteTestHandler (IDbContext dbContext) : IReq
             throw new ApiException("Тест с таким идентификатором не существует.");
         }
 
-        var executionTask = new ExecutionTask
+        var executionTask = new CompilerTask
         {
             Id = Guid.NewGuid(),
             CompilerId = request.CompilerId,
@@ -42,7 +42,7 @@ internal sealed class CompilerToExecuteTestHandler (IDbContext dbContext) : IReq
             DateOfCreation = DateTime.UtcNow,
         };
 
-        await dbContext.ExecutionTasks.AddAsync(executionTask, cancellationToken);
+        await dbContext.CompilerTasks.AddAsync(executionTask, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

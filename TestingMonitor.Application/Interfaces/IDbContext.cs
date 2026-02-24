@@ -15,7 +15,7 @@ public interface IDbContext
 
     DbSet<HeaderFile> HeaderFiles { get; }
 
-    DbSet<ExecutionTask> ExecutionTasks { get; }
+    DbSet<CompilerTask> CompilerTasks { get; }
 
     DbSet<TestExecution> TestExecutions { get; }
 

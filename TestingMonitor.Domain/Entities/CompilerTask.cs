@@ -3,7 +3,7 @@
 /// <summary>
 /// Задача по выполнению.
 /// </summary>
-public sealed class ExecutionTask
+public sealed class CompilerTask
 {
     /// <summary>
     /// Идентификатор.
@@ -33,7 +33,7 @@ public sealed class ExecutionTask
     /// <summary>
     /// Дата окончания.
     /// </summary>
-    public DateTime? DateOfEnd { get; set; }
+    public DateTime? DateOfCompletion { get; set; }
 
     /// <summary>
     /// Идентификатор теста.

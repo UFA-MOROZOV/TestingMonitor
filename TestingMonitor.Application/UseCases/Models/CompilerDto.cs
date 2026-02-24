@@ -1,4 +1,4 @@
-﻿namespace TestingMonitor.Application.UseCases.Compilers.Get;
+﻿namespace TestingMonitor.Application.UseCases.Models;
 
 /// <summary>
 /// Компилятор.

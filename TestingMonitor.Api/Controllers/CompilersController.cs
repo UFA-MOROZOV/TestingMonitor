@@ -10,7 +10,7 @@ using TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
 using TestingMonitor.Application.UseCases.Compilers.ExecuteTests;
 using TestingMonitor.Application.UseCases.Compilers.Get;
 using TestingMonitor.Application.UseCases.Compilers.Update;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using TestingMonitor.Application.UseCases.Models;
 
 namespace TestingMonitor.Api.Controllers;
 

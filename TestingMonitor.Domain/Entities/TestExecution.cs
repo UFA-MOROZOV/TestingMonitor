@@ -18,7 +18,7 @@ public sealed class TestExecution
     /// <summary>
     /// Задача на выполнение.
     /// </summary>
-    public ExecutionTask? ExecutionTask { get; set; }
+    public CompilerTask? ExecutionTask { get; set; }
 
     /// <summary>
     /// Идентификатор теста.
