@@ -11,6 +11,11 @@ public sealed class CompilerTask
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Имя.
+    /// </summary>
+    public string Name { get; set; } = null!;
+
+    /// <summary>
     /// Идентификатор компилятора.
     /// </summary>
     public int CompilerId { get; set; }

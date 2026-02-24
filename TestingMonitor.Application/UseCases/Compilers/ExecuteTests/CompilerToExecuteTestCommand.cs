@@ -8,6 +8,11 @@ namespace TestingMonitor.Application.UseCases.Compilers.ExecuteTests;
 public sealed class CompilerToExecuteTestCommand : IRequest<Guid>
 {
     /// <summary>
+    /// Имя для задания.
+    /// </summary>
+    public string Name { get; set; } = null!;
+
+    /// <summary>
     /// Идентификатор компилятора.
     /// </summary>
     public int CompilerId { get; set; }

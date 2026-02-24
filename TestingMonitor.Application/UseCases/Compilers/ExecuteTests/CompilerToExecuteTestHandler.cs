@@ -36,6 +36,7 @@ internal sealed class CompilerToExecuteTestHandler (IDbContext dbContext) : IReq
         var executionTask = new CompilerTask
         {
             Id = Guid.NewGuid(),
+            Name = request.Name,
             CompilerId = request.CompilerId,
             TestGroupId = request.TestGroupId,
             TestId = request.TestId,

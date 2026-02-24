@@ -14,11 +14,6 @@ public sealed class GetCompilerTaskByIdResponse
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Идентификатор компилятора.
-    /// </summary>
-    public int CompilerId { get; set; }
-
-    /// <summary>
     /// Компилятор.
     /// </summary>
     public CompilerDto Compiler { get; set; } = null!;
@@ -39,29 +34,19 @@ public sealed class GetCompilerTaskByIdResponse
     public DateTime? DateOfCompletion { get; set; }
 
     /// <summary>
-    /// Идентификатор теста.
-    /// </summary>
-    public Guid? TestId { get; set; }
-
-    /// <summary>
     /// Тест.
     /// </summary>
-    public Test? Test { get; set; }
-
-    /// <summary>
-    /// Идентификатор группы теста.
-    /// </summary>
-    public Guid? TestGroupId { get; set; }
+    public TestItemDto? Test { get; set; }
 
     /// <summary>
     /// Группа тестов.
     /// </summary>
-    public TestGroup? TestGroup { get; set; }
+    public TestItemDto? TestGroup { get; set; }
 
     /// <summary>
     /// Выполненные тесты.
     /// </summary>
-    public ICollection<TestExecution> TestsExecuted { get; set; } = [];
+    public ICollection<TaskExecutionDto> TestsExecuted { get; set; } = [];
 }
 
 public sealed class TaskExecutionDto
