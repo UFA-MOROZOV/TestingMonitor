@@ -5,7 +5,7 @@ namespace TestingMonitor.Application.UseCases.Tests.Create;
 /// <summary>
 /// Команда добавления теста.
 /// </summary>
-public sealed class TestToCreateCommand : IRequest<Guid>
+public sealed class TestToUploadCommand : IRequest<Guid>
 {
     /// <summary>
     /// Поток с файлом.

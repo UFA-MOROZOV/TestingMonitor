@@ -9,9 +9,9 @@ namespace TestingMonitor.Application.UseCases.Tests.Create;
 /// <summary>
 /// Обработчик добавления тестов.
 /// </summary>
-internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToCreateCommand, Guid>
+internal sealed class TestToUploadHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToUploadCommand, Guid>
 {
-    public async Task<Guid> Handle(TestToCreateCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(TestToUploadCommand request, CancellationToken cancellationToken)
     {
         if (!await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
         {
