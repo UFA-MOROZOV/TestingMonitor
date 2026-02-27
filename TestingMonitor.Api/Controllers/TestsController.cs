@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using TestingMonitor.Application.UseCases.HeaderFiles.Create;
 using TestingMonitor.Application.UseCases.HeaderFiles.Delete;
 using TestingMonitor.Application.UseCases.HeaderFiles.Get;
+using TestingMonitor.Application.UseCases.HeaderFiles.GetContent;
+using TestingMonitor.Application.UseCases.HeaderFiles.UpdateContent;
+using TestingMonitor.Application.UseCases.HeaderFiles.Upload;
 using TestingMonitor.Application.UseCases.Tests.Create;
 using TestingMonitor.Application.UseCases.Tests.Delete;
 using TestingMonitor.Application.UseCases.Tests.Get;
@@ -31,7 +34,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(query, cancellationToken);
 
     /// <summary>
-    /// Создание теста через файл.
+    /// Загрузка теста через файл.
     /// </summary>
     [HttpPost("/api/tests/upload")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
@@ -49,6 +52,14 @@ public sealed class TestsController(IMediator mediator) : Controller
 
         return await mediator.Send(command, cancellationToken);
     }
+
+    /// <summary>
+    /// Создание теста.
+    /// </summary>
+    [HttpPost("/api/tests")]
+    [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Guid>> CreateTest(TestToCreateCommand command, CancellationToken cancellationToken)
+        => await mediator.Send(command, cancellationToken);
 
     /// <summary>
     /// Получение содержимого.
@@ -164,23 +175,23 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// <summary>
     /// Получение header файлов.
     /// </summary>
-    [HttpGet("/api/tests/headerFiles")]
+    [HttpGet("/api/headerFiles")]
     [ProducesResponseType<GetHeaderFilesResponse>(StatusCodes.Status200OK)]
     public async Task<ActionResult<GetHeaderFilesResponse>> CreateHeaderFile(GetHeaderFilesQuery query,
         CancellationToken cancellationToken)
         => await mediator.Send(query, cancellationToken);
 
     /// <summary>
-    /// Создание header файла.
+    /// Загрузка header файла.
     /// </summary>
-    [HttpPost("/api/tests/headerFiles")]
+    [HttpPost("/api/headerFiles/upload")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
     public async Task<ActionResult<Guid>> CreateHeaderFile(IFormFile file,
         CancellationToken cancellationToken)
     {
         using var stream = file.OpenReadStream();
 
-        var command = new HeaderFileToCreateCommand
+        var command = new HeaderFileToUploadCommand
         {
             Stream = stream,
             Name = file.FileName,
@@ -190,13 +201,42 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
+    /// Создание header файла.
+    /// </summary>
+    [HttpPost("/api/headerFiles")]
+    [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Guid>> CreateHeaderFile(HeaderFileToCreateCommand command, CancellationToken cancellationToken)
+        => await mediator.Send(command, cancellationToken);
+
+    /// <summary>
     /// Удаление header файла.
     /// </summary>
-    [HttpDelete("/api/tests/headerFiles/{id:guid}")]
+    [HttpDelete("/api/headerFiles/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Unit>> DeleteHeaderFile(Guid id, CancellationToken cancellationToken)
     {
         await mediator.Send(new HeaderFileToDeleteCommand(id), cancellationToken);
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Получение содержимого header файла.
+    /// </summary>
+    [HttpGet("/api/headerFiles/{id:guid}/content")]
+    [ProducesResponseType<GetHeaderFileContentByIdResponse>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<GetHeaderFileContentByIdResponse>> GetHeaderFileContent(Guid id,
+        CancellationToken cancellationToken)
+        => await mediator.Send(new GetHeaderFileContentByIdQuery(id), cancellationToken);
+
+    /// <summary>
+    /// Обновление header файла.
+    /// </summary>
+    [HttpPut("/api/headerFiles")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult<Unit>> UpdateHeader(HeaderFileToUpdateCommand command, CancellationToken cancellationToken)
+    {
+        await mediator.Send(command, cancellationToken);
 
         return NoContent();
     }
