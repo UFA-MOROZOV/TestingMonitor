@@ -23,5 +23,10 @@ public interface IFileProvider
     /// <summary>
     /// Обновление содержимого файла.
     /// </summary>
-    public Task<string> UpdateContent(string path, string content, CancellationToken cancellationToken);
+    public Task UpdateContent(string path, string content, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Создание файла с содержимым.
+    /// </summary>
+    public Task<string> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken);
 }
