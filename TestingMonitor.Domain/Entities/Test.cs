@@ -1,7 +1,7 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Тест.
+/// Файл.
 /// </summary>
 public sealed class Test
 {
@@ -16,15 +16,15 @@ public sealed class Test
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Файлы .h.
+    /// Включенные header файлы для теста.
     /// </summary>
-    public ICollection<string> HFiles { get; set; } = [];
+    public ICollection<TestToHeaderFile> HeaderFiles { get; set; } = [];
 
     /// <summary>
     /// Путь до файла.
     /// </summary>
     public string Path { get; set; } = null!;
-    
+
     /// <summary>
     /// Группа.
     /// </summary>
@@ -33,5 +33,5 @@ public sealed class Test
     /// <summary>
     /// Идентификатор группы.
     /// </summary>
-    public Guid? TestGroupId { get; set; } 
+    public Guid? TestGroupId { get; set; }
 }

@@ -16,7 +16,7 @@ public class AuthController(IConfiguration configuration) : ControllerBase
     [AllowAnonymous]
     public IActionResult Login([FromBody] LoginCommand request)
     {
-        if (request.Username != "admin" || request.Password != "123")
+        if (request.Username != "admin" || request.Password != configuration["AdminPassword"]!)
         {
             return Unauthorized(new { message = "Invalid credentials" });
         }

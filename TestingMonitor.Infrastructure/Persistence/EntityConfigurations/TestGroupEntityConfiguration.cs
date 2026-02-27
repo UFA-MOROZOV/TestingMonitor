@@ -9,7 +9,7 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Persistence.EntityConfigurations;
 
-internal class TestGroupEntityConfiguration : IEntityTypeConfiguration<TestGroup>
+internal sealed class TestGroupEntityConfiguration : IEntityTypeConfiguration<TestGroup>
 {
     public void Configure(EntityTypeBuilder<TestGroup> builder)
     {

@@ -3,7 +3,7 @@
 namespace TestingMonitor.Application.UseCases.Compilers.DownloadDocker;
 
 /// <summary>
-/// Команда загрузки докера компилятора.
+/// Команда загрузки докера компилятора с репозиториев.
 /// </summary>
 public sealed class CompilerToDownloadDockerCommand(int id) : IRequest<Unit>
 {

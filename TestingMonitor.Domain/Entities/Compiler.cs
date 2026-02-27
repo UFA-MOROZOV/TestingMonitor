@@ -11,7 +11,7 @@ public sealed class Compiler
     public int Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Имя образа.
     /// </summary>
     public string Name { get; set; } = null!;
 
@@ -24,6 +24,11 @@ public sealed class Compiler
     /// Имя команды.
     /// </summary>
     public string CommandName { get; set; } = null!;
+
+    /// <summary>
+    /// Полное имя образа с версией.
+    /// </summary>
+    public string ImageName { get; set;} = null!;
 
     /// <summary>
     /// Есть ли локальный докер.

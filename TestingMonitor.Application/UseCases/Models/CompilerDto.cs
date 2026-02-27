@@ -1,4 +1,4 @@
-﻿namespace TestingMonitor.Application.UseCases.Compilers.Get;
+﻿namespace TestingMonitor.Application.UseCases.Models;
 
 /// <summary>
 /// Компилятор.
@@ -11,7 +11,7 @@ public sealed class CompilerDto
     public int Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Имя образа.
     /// </summary>
     public string Name { get; set; } = null!;
 

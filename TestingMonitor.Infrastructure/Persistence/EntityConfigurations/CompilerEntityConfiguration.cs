@@ -4,7 +4,7 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Infrastructure.Persistence.EntityConfigurations;
 
-internal class CompilerEntityConfiguration : IEntityTypeConfiguration<Compiler>
+internal sealed class CompilerEntityConfiguration : IEntityTypeConfiguration<Compiler>
 {
     public void Configure(EntityTypeBuilder<Compiler> builder)
     {

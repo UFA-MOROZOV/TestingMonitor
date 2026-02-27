@@ -1,0 +1,22 @@
+﻿using TestingMonitor.Application.Interfaces.Models;
+using TestingMonitor.Domain.Entities;
+
+namespace TestingMonitor.Application.Interfaces;
+
+public interface IDockerManager
+{
+    public Task<bool> ImageExistsAsync(string imageName, CancellationToken cancellationToken); 
+
+    public Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, string code, CancellationToken cancellationToken);
+
+    public Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, Test test, List<HeaderFile> headers,
+        CancellationToken cancellationToken);
+
+    public Task<bool> DownloadCompilerAsync(Compiler compiler, CancellationToken cancellationToken);
+
+    public Task<bool> LoadDockerImageAsync(Stream tarStream, CancellationToken cancellationToken);
+
+    public Task<bool> DeleteDockerImageAsync(Compiler compiler, CancellationToken cancellationToken);
+
+    public Task<Dictionary<string, bool>> CheckDockersAsync(List<string> imageNames, CancellationToken cancellationToken);
+}

@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Application.UseCases.Models;
 
 namespace TestingMonitor.Application.UseCases.Tests.Get;
 
@@ -32,12 +33,12 @@ public sealed class GetTestsQuery : IRequest<GetTestsResponse>
         {
             var groups = await dbContext.TestGroups
                 .Where(x => (request.Global || request.ParentId == x.ParentGroupId))
-                .ProjectTo<ItemDto>(mapper.ConfigurationProvider)
+                .ProjectTo<TestItemDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             var tests = await dbContext.Tests
                 .Where(x => (request.Global || request.ParentId == x.TestGroupId))
-                .ProjectTo<ItemDto>(mapper.ConfigurationProvider)
+                .ProjectTo<TestItemDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             if (request.Search != null)

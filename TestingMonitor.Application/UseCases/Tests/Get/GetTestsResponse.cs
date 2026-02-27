@@ -1,4 +1,6 @@
-﻿namespace TestingMonitor.Application.UseCases.Tests.Get;
+﻿using TestingMonitor.Application.UseCases.Models;
+
+namespace TestingMonitor.Application.UseCases.Tests.Get;
 
 /// <summary>
 /// Результат получения тестов.
@@ -8,26 +10,11 @@ public sealed class GetTestsResponse
     /// <summary>
     /// Подгруппы..
     /// </summary>
-    public ICollection<ItemDto> SubGroups { get; set; } = [];
+    public ICollection<TestItemDto> SubGroups { get; set; } = [];
 
     /// <summary>
     /// Тесты.
     /// </summary>
-    public ICollection<ItemDto> Tests { get; set; } = [];
+    public ICollection<TestItemDto> Tests { get; set; } = [];
 }
 
-/// <summary>
-/// Объект группы.
-/// </summary>
-public class ItemDto
-{
-    /// <summary>
-    /// Идентификатор.
-    /// </summary>
-    public Guid Id { get; set; }
-
-    /// <summary>
-    /// Имя.
-    /// </summary>
-    public string Name { get; set; } = null!;
-}   

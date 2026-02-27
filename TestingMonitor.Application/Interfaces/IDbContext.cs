@@ -11,5 +11,13 @@ public interface IDbContext
 
     DbSet<TestGroup> TestGroups { get; }
 
+    DbSet<TestToHeaderFile> TestToHeaderFiles { get; }
+
+    DbSet<HeaderFile> HeaderFiles { get; }
+
+    DbSet<CompilerTask> CompilerTasks { get; }
+
+    DbSet<TestExecution> TestExecutions { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
