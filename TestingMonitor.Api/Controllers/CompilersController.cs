@@ -136,7 +136,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     /// </summary>
     [HttpPut("/api/compilers/{id:int}/uploadFile")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult<Unit>> UploadDocker(int id, [FromForm] FormFile imageFile, CancellationToken cancellationToken)
+    public async Task<ActionResult<Unit>> UploadDocker(int id, [FromForm] IFormFile imageFile, CancellationToken cancellationToken)
     {
         var stream = imageFile.OpenReadStream();
 

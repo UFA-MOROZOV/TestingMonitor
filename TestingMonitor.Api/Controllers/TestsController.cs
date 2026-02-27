@@ -58,7 +58,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// </summary>
     [HttpPost("/api/tests")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> CreateTest(TestToCreateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> CreateTest([FromBody] TestToCreateCommand command, CancellationToken cancellationToken)
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>
@@ -75,7 +75,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// </summary>
     [HttpPut("/api/tests")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult<Unit>> UpdateTest(TestToUpdateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Unit>> UpdateTest([FromBody] TestToUpdateCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
 
@@ -205,7 +205,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// </summary>
     [HttpPost("/api/headerFiles")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> CreateHeaderFile(HeaderFileToCreateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> CreateHeaderFile([FromBody] HeaderFileToCreateCommand command, CancellationToken cancellationToken)
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>
@@ -234,7 +234,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     /// </summary>
     [HttpPut("/api/headerFiles")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult<Unit>> UpdateHeader(HeaderFileToUpdateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Unit>> UpdateHeader([FromBody] HeaderFileToUpdateCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
 
