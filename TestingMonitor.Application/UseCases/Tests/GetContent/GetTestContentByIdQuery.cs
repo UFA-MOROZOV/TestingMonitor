@@ -15,7 +15,7 @@ public sealed class GetTestContentByIdQuery(Guid id): IRequest<GetTestContentByI
     /// </summary>
     public Guid Id { get; set; } = id;
 
-    private class Handler(IDbContext dbContext, IFileProvider fileProvider)
+    private class Handler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<GetTestContentByIdQuery, GetTestContentByIdResponse>
     {
         public async Task<GetTestContentByIdResponse> Handle(GetTestContentByIdQuery request, CancellationToken cancellationToken)
         {
@@ -32,6 +32,7 @@ public sealed class GetTestContentByIdQuery(Guid id): IRequest<GetTestContentByI
                 Id = test.Id,
                 Name = test.Name,
                 Content = await fileProvider.GetContent(test.Path, cancellationToken),
+                TestGroupId = test.TestGroupId
             };
         }
     }

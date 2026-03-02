@@ -22,8 +22,6 @@ internal sealed class HeaderFileToUpdateHandler(IDbContext dbContext, IFileProvi
 
         await fileProvider.UpdateContent(headerFile.Path, request.Content, cancellationToken);
 
-        dbContext.HeaderFiles.Remove(headerFile);
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

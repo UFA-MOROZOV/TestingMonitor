@@ -15,9 +15,9 @@ public sealed class GetHeaderFileContentByIdQuery(Guid id) : IRequest<GetHeaderF
     /// </summary>
     public Guid Id { get; set; } = id;
 
-    private class Handler(IDbContext dbContext, IFileProvider fileProvider)
+    private class Handler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<GetHeaderFileContentByIdQuery, GetHeaderFileContentByIdResponse>
     {
-        public async Task<GetHeaderFileContentByIdResponse> Handle(GetHeaderFileContentByIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetHeaderFileContentByIdResponse> Handle(GetHeaderFileContentByIdQuery request, CancellationToken cancellationToken) 
         {
             var HeaderFile = await dbContext.HeaderFiles
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);

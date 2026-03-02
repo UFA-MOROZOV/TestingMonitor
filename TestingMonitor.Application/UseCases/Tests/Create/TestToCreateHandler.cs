@@ -13,7 +13,8 @@ internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fi
 {
     public async Task<Guid> Handle(TestToCreateCommand request, CancellationToken cancellationToken)
     {
-        if (!await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
+        if (request.GroupId.HasValue
+            && !await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
         {
             throw new ApiException("Группы с таким идентификатором не существует.");
         }

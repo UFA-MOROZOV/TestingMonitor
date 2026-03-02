@@ -23,8 +23,6 @@ internal sealed class TestToUpdateHandler(IDbContext dbContext, IFileProvider fi
 
         await fileProvider.UpdateContent(test.Path, request.Content, cancellationToken);
 
-        dbContext.Tests.Remove(test);
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

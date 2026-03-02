@@ -21,4 +21,9 @@ public sealed class GetTestContentByIdResponse: IRequest<Unit>
     /// Контент.
     /// </summary>
     public string Content { get; set; } = null!;
+
+    /// <summary>
+    /// Идентификатор группы.
+    /// </summary>
+    public Guid? TestGroupId { get; set; }
 }
