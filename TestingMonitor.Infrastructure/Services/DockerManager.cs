@@ -31,10 +31,10 @@ internal sealed class DockerManager : IDockerManager
     {
         try
         {
-            await Client.Images.InspectImageAsync(imageName);
+            await Client.Images.InspectImageAsync(imageName, cancellationToken);
             return true;
         }
-        catch (DockerImageNotFoundException)
+        catch
         {
             return false;
         }
