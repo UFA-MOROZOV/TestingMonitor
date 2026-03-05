@@ -5,9 +5,6 @@ using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
 
-/// <summary>
-/// Обработчик выполнения кода компилятором.
-/// </summary>
 internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDockerManager dockerManager)
     : IRequestHandler<CompilerToExecuteCodeCommand, string>
 {

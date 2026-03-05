@@ -5,7 +5,7 @@ using MediatR;
 namespace TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
 
 /// <summary>
-/// Команда выполнения кода компилятором.
+/// Command of creating a task for compiler to execute.
 /// </summary>
 public sealed class CompilerToExecuteCodeCommand : IRequest<string>
 {

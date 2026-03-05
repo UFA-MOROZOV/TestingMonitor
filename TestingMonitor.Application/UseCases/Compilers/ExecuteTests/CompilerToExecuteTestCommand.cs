@@ -3,27 +3,27 @@
 namespace TestingMonitor.Application.UseCases.Compilers.ExecuteTests;
 
 /// <summary>
-/// Команда тестирования компилятора.
+/// Command of creating a task for compiler to execute.
 /// </summary>
 public sealed class CompilerToExecuteTestCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Имя для задания.
+    /// Name for a task.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Идентификатор компилятора.
+    /// Compiler Id.
     /// </summary>
     public int CompilerId { get; set; }
 
     /// <summary>
-    /// Идентификатор теста.
+    ///  Test Id.
     /// </summary>
     public Guid? TestId { get; set; }
 
     /// <summary>
-    /// Идентификатор группы теста.
+    /// Test group Id.
     /// </summary>
     public Guid? TestGroupId { get; set; }
 }

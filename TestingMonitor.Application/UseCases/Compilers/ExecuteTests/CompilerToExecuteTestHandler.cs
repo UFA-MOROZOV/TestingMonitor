@@ -6,9 +6,6 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Application.UseCases.Compilers.ExecuteTests;
 
-/// <summary>
-/// Обработчик команды тестирования компилятора.
-/// </summary>
 internal sealed class CompilerToExecuteTestHandler (IDbContext dbContext) : IRequestHandler<CompilerToExecuteTestCommand, Guid>
 {
     public async Task<Guid> Handle(CompilerToExecuteTestCommand request, CancellationToken cancellationToken)

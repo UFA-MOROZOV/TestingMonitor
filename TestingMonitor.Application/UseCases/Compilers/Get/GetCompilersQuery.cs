@@ -8,7 +8,7 @@ using TestingMonitor.Application.UseCases.Models;
 namespace TestingMonitor.Application.UseCases.Compilers.Get;
 
 /// <summary>
-/// Запрос на получение компиляторов.
+/// Query of getting all compilers.
 /// </summary>
 public sealed class GetCompilersQuery : IRequest<List<CompilerDto>>
 {
