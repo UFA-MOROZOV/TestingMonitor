@@ -3,19 +3,19 @@
 namespace TestingMonitor.Application.UseCases.Tests.Create;
 
 /// <summary>
-/// Запрос на создание теста.
+/// Команда добавления теста.
 /// </summary>
-public sealed class TestToCreateCommand : IRequest<Guid>
+public sealed class TestToUploadCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Имя.
+    /// Поток с файлом.
     /// </summary>
-    public string Name { get; set; } = null!;
+    public Stream Stream { get; set; } = null!;
 
     /// <summary>
-    /// Контент.
+    /// Имя файла.
     /// </summary>
-    public string Content { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Идентификатор группы.

@@ -1,4 +1,6 @@
-﻿using TestingMonitor.Application.Interfaces;
+﻿using System;
+using System.IO;
+using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Infrastructure.Services;
 
@@ -8,6 +10,27 @@ namespace TestingMonitor.Infrastructure.Services;
 internal sealed class FileProvider : IFileProvider
 {
     private readonly string _folder = "Files";
+
+    public async Task<string> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!Directory.Exists(_folder))
+            {
+                Directory.CreateDirectory(_folder);
+            }
+
+            var path = Path.Combine(_folder, guid.ToString());
+
+            await File.WriteAllTextAsync(path, content, cancellationToken);
+
+            return path;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
 
     /// <inheritdoc/>
     public async Task DeleteFileAsync(string path, CancellationToken cancellationToken)
@@ -23,6 +46,14 @@ internal sealed class FileProvider : IFileProvider
         {
             return;
         }
+    }
+
+    public async Task<string> GetContent(string path, CancellationToken cancellationToken)
+        => await File.ReadAllTextAsync(path, cancellationToken); 
+
+    public async Task UpdateContent(string path, string content, CancellationToken cancellationToken)
+    {
+        await File.WriteAllTextAsync(path, content, cancellationToken);
     }
 
     /// <inheritdoc/>

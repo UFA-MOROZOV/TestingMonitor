@@ -67,7 +67,7 @@ public sealed class TestExecutionDto
     public bool IsSuccessful { get; set; }
 
     /// <summary>
-    /// Сообщение об ошибке.
+    /// Вывод.
     /// </summary>
-    public string? ErrorMessage { get; set; }
+    public string? Output { get; set; }
 }

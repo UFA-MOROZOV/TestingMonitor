@@ -7,14 +7,13 @@ using TestingMonitor.Domain.Entities;
 namespace TestingMonitor.Application.UseCases.Tests.Create;
 
 /// <summary>
-/// Обработчик обновления теста.
+/// Обработчик добавления тестов.
 /// </summary>
-internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToCreateCommand, Guid>
+internal sealed class TestToUploadHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToUploadCommand, Guid>
 {
-    public async Task<Guid> Handle(TestToCreateCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(TestToUploadCommand request, CancellationToken cancellationToken)
     {
-        if (request.GroupId.HasValue
-            && !await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
+        if (!await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
         {
             throw new ApiException("Группы с таким идентификатором не существует.");
         }
@@ -26,7 +25,7 @@ internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fi
             TestGroupId = request.GroupId
         };
 
-        var path = await fileProvider.CreateWithContent(request.Content, test.Id, cancellationToken)
+        var path = await fileProvider.UploadFileAsync(request.Stream, test.Id, cancellationToken)
             ?? throw new ApiException("Не удалось сохранить файл.");
 
         test.Path = path;

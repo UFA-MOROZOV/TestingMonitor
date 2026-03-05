@@ -14,6 +14,8 @@ internal sealed class TestGroupToDeleteHandler(IDbContext dbContext, IFileProvid
     {
         await DeleteFolderAsync(request.Id, cancellationToken);
 
+        await dbContext.SaveChangesAsync(cancellationToken);
+
         return Unit.Value;
     }
 
@@ -31,12 +33,16 @@ internal sealed class TestGroupToDeleteHandler(IDbContext dbContext, IFileProvid
         foreach (var test in testGroup.Tests)
         {
             await fileProvider.DeleteFileAsync(test.Path, cancellationToken);
+
+            dbContext.Tests.Remove(test);
         }
 
         foreach (var subgroup in testGroup.SubGroups)
         {
             await DeleteFolderAsync(subgroup.Id, cancellationToken);
         }
+
+        dbContext.TestGroups.Remove(testGroup);
 
         return;
     }
