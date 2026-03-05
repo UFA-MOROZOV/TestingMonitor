@@ -7,7 +7,7 @@ using TestingMonitor.Application.Interfaces;
 namespace TestingMonitor.Infrastructure.Services.Background;
 
 /// <summary>
-/// Серсвис проверки существования докера.
+/// Service that monitors image existence.
 /// </summary>
 internal class DockerExistenceMonitor(IServiceScopeFactory serviceScopeFactory, ILogger<DockerExistenceMonitor> logger) : BackgroundService
 {

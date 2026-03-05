@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Compilers.ExecuteCode;
 
-/// <summary>
-/// Обработчик выполнения кода компилятором.
-/// </summary>
-internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDockerManager dockerManager)
+internal sealed class CompilerToExecuteCodeHandler(IDbContext dbContext, IDockerManager dockerManager)
     : IRequestHandler<CompilerToExecuteCodeCommand, string>
 {
     /// <inheritdoc/>
@@ -19,10 +16,10 @@ internal sealed class CompilerToExecuteCodeHandler (IDbContext dbContext, IDocke
 
         if (compiler == null)
         {
-            throw new ApiException("No compiler found"); 
+            ErrorCode.CompilerNotFound.Throw();
         }
 
-        var output = await dockerManager.ExecuteCodeAsync(compiler, Guid.NewGuid(), command.Code, cancellationToken);
+        var output = await dockerManager.ExecuteCodeAsync(compiler!, Guid.NewGuid(), command.Code, cancellationToken);
 
         return output.Message;
     }

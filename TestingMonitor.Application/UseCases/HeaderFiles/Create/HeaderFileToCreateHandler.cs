@@ -1,14 +1,10 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Create;
 
-/// <summary>
-/// Обработчик обновления header файла.
-/// </summary>
 internal sealed class HeaderFileToCreateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<HeaderFileToCreateCommand, Guid>
 {
     public async Task<Guid> Handle(HeaderFileToCreateCommand request, CancellationToken cancellationToken)
@@ -19,10 +15,14 @@ internal sealed class HeaderFileToCreateHandler(IDbContext dbContext, IFileProvi
             Name = request.Name,
         };
 
-        var path = await fileProvider.CreateWithContent(request.Content, headerFile.Id, cancellationToken)
-            ?? throw new ApiException("Не удалось сохранить файл.");
+        var path = await fileProvider.CreateWithContent(request.Content, headerFile.Id, cancellationToken);
 
-        headerFile.Path = path;
+        if (path == null)
+        {
+            ErrorCode.ErrorWithFileSaving.Throw();
+        }
+
+        headerFile.Path = path!;
 
         await dbContext.HeaderFiles.AddAsync(headerFile, cancellationToken);
 

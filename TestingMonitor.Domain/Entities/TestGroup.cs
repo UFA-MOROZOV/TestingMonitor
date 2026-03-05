@@ -1,42 +1,42 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Группа тестов.
+/// Test group.
 /// </summary>
 public sealed class TestGroup
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя группы.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Группа родительская.
+    /// Parent group.
     /// </summary>
     public Guid? ParentGroupId { get; set; }
 
     /// <summary>
-    /// Группа родительская.
+    /// Parent group id.
     /// </summary>
     public TestGroup? ParentGroup { get; set; }
 
     /// <summary>
-    /// Тесты.
+    /// Tests.
     /// </summary>
     public ICollection<Test> Tests { get; set; } = [];
 
     /// <summary>
-    /// Файлы header.
+    /// Header files to include.
     /// </summary>
     public ICollection<TestGroupToHeaderFile> HeaderFiles { get; set; } = [];
 
     /// <summary>
-    /// Подгруппы.
+    /// Subgroups.
     /// </summary>
     public ICollection<TestGroup> SubGroups { get; set; } = [];
 }

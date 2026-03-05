@@ -7,22 +7,22 @@ using TestingMonitor.Application.Interfaces;
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Get;
 
 /// <summary>
-/// Запрос на получение header файлов.
+/// Query for getting header file.
 /// </summary>
 public sealed class GetHeaderFilesQuery : IRequest<GetHeaderFilesResponse>
 {
     /// <summary>
-    /// Поиск по ключевому слову.
+    /// Keyword search.
     /// </summary>
     public string? Search { get; set; }
 
     /// <summary>
-    /// Идентификатор группы тестов.
+    /// Group Id.
     /// </summary>
     public Guid? TestGroupId { get; set; }
 
     /// <summary>
-    /// Идентификатор теста.
+    /// Test Id.
     /// </summary>
     public Guid? TestId { get; set; }
 
@@ -37,7 +37,7 @@ public sealed class GetHeaderFilesQuery : IRequest<GetHeaderFilesResponse>
                 headersFileQyery = headersFileQyery
                     .Where(x => x.Name.Contains(request.Search, StringComparison.OrdinalIgnoreCase));
             }
-            
+
             if (request.TestGroupId != null)
             {
                 headersFileQyery = headersFileQyery

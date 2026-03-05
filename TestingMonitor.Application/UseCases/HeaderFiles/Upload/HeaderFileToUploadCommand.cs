@@ -3,17 +3,17 @@
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Upload;
 
 /// <summary>
-/// Команда загрузки header файла.
+/// Command of uploading a header file
 /// </summary>
 public sealed class HeaderFileToUploadCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Поток с файлом.
+    /// File stream.
     /// </summary>
     public Stream Stream { get; set; } = null!;
 
     /// <summary>
-    /// Имя файла.
+    /// File name.
     /// </summary>
     public string Name { get; set; } = null!;
 }

@@ -3,22 +3,22 @@
 public class CompilerModel
 {
     /// <summary>
-    /// Имя образа.
+    /// Image name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Версия.
+    /// Version.
     /// </summary>
     public string Version { get; set; } = null!;
 
     /// <summary>
-    /// Имя команды.
+    /// Command to execute.
     /// </summary>
     public string CommandName { get; set; } = null!;
 
     /// <summary>
-    /// Файл.
+    /// File.
     /// </summary>
     public IFormFile? File { get; set; }
 }

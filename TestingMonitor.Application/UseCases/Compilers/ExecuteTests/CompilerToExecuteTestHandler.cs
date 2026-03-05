@@ -1,36 +1,33 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Compilers.ExecuteTests;
 
-/// <summary>
-/// Обработчик команды тестирования компилятора.
-/// </summary>
-internal sealed class CompilerToExecuteTestHandler (IDbContext dbContext) : IRequestHandler<CompilerToExecuteTestCommand, Guid>
+internal sealed class CompilerToExecuteTestHandler(IDbContext dbContext) : IRequestHandler<CompilerToExecuteTestCommand, Guid>
 {
     public async Task<Guid> Handle(CompilerToExecuteTestCommand request, CancellationToken cancellationToken)
     {
         if (!await dbContext.Compilers.AnyAsync(x => x.Id == request.CompilerId, cancellationToken))
         {
-            throw new ApiException("Компилятор с таким идентификатором не существует.");
+            ErrorCode.CompilerNotFound.Throw();
         }
 
         if (!(request.TestGroupId == null ^ request.TestId == null))
         {
-            throw new ApiException("Некорректная цель сканирования.");
+            ErrorCode.CompilerStart.Throw("You must choose only either test group id or test id");
         }
 
         if (request.TestGroupId != null && !await dbContext.TestGroups.AnyAsync(x => x.Id == request.TestGroupId, cancellationToken))
         {
-            throw new ApiException("Группа с таким идентификатором не существует.");
+            ErrorCode.TestGroupNotFound.Throw();
         }
 
         if (request.TestId != null && !await dbContext.Tests.AnyAsync(x => x.Id == request.TestId, cancellationToken))
         {
-            throw new ApiException("Тест с таким идентификатором не существует.");
+            ErrorCode.TestNotFound.Throw();
         }
 
         var executionTask = new CompilerTask

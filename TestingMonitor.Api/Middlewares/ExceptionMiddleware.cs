@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using TestingMonitor.Application.Exceptions;
+using TestingMonitor.Domain.Exceptions;
 
 namespace TestingMonitor.Api.Middlewares;
 
@@ -49,12 +49,12 @@ public class ExceptionMiddleware
 }
 
 /// <summary>
-/// Ошибка апи.
+/// Api exception response.
 /// </summary>
 public sealed class ExceptionResponse
 {
     /// <summary>
-    /// Сообщение.
+    /// Message.
     /// </summary>
     public string Message { get; set; } = null!;
 }

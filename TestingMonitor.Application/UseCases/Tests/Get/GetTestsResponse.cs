@@ -3,17 +3,17 @@
 namespace TestingMonitor.Application.UseCases.Tests.Get;
 
 /// <summary>
-/// Результат получения тестов.
+/// Result of getting tests.
 /// </summary>
 public sealed class GetTestsResponse
 {
     /// <summary>
-    /// Подгруппы..
+    /// Subgroups.
     /// </summary>
     public ICollection<TestItemDto> SubGroups { get; set; } = [];
 
     /// <summary>
-    /// Тесты.
+    /// Tests.
     /// </summary>
     public ICollection<TestItemDto> Tests { get; set; } = [];
 }

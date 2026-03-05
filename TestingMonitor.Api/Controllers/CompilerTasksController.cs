@@ -11,7 +11,7 @@ namespace TestingMonitor.Api.Controllers;
 public sealed class CompilersTasksController(IMediator mediator) : Controller
 {
     /// <summary>
-    /// Получение всех задач компиляторов.
+    /// Get all compiler tasks.
     /// </summary>
     [HttpGet("/api/compilersTasks")]
     [ProducesResponseType<List<CompilerTaskDto>>(StatusCodes.Status200OK)]
@@ -19,7 +19,7 @@ public sealed class CompilersTasksController(IMediator mediator) : Controller
         => await mediator.Send(new GetCompilerTasksQuery(), cancellationToken);
 
     /// <summary>
-    /// Получение задачи компилятора по идентификатору.
+    /// Get a compiler task.
     /// </summary>
     [HttpGet("/api/compilersTasks/{id:guid}")]
     [ProducesResponseType<GetCompilerTaskByIdResponse>(StatusCodes.Status200OK)]

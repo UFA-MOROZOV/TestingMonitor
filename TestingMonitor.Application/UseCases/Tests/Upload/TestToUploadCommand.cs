@@ -1,24 +1,24 @@
 ﻿using MediatR;
 
-namespace TestingMonitor.Application.UseCases.Tests.Create;
+namespace TestingMonitor.Application.UseCases.Tests.Upload;
 
 /// <summary>
-/// Команда добавления теста.
+/// Command of uploading a test.
 /// </summary>
 public sealed class TestToUploadCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Поток с файлом.
+    /// File stream
     /// </summary>
     public Stream Stream { get; set; } = null!;
 
     /// <summary>
-    /// Имя файла.
+    /// File name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Идентификатор группы.
+    /// Group Id.
     /// </summary>
     public Guid? GroupId { get; set; }
 }

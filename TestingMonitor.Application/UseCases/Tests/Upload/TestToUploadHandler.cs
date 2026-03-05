@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Application.UseCases.Tests.Upload;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Tests.Create;
 
@@ -15,7 +16,7 @@ internal sealed class TestToUploadHandler(IDbContext dbContext, IFileProvider fi
     {
         if (!await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
         {
-            throw new ApiException("Группы с таким идентификатором не существует.");
+            ErrorCode.TestGroupNotFound.Throw();
         }
 
         var test = new Test
@@ -25,10 +26,14 @@ internal sealed class TestToUploadHandler(IDbContext dbContext, IFileProvider fi
             TestGroupId = request.GroupId
         };
 
-        var path = await fileProvider.UploadFileAsync(request.Stream, test.Id, cancellationToken)
-            ?? throw new ApiException("Не удалось сохранить файл.");
+        var path = await fileProvider.UploadFileAsync(request.Stream, test.Id, cancellationToken);
 
-        test.Path = path;
+        if (path == null)
+        {
+            ErrorCode.ErrorWithFileSaving.Throw();
+        }
+
+        test.Path = path!;
 
         await dbContext.Tests.AddAsync(test, cancellationToken);
 

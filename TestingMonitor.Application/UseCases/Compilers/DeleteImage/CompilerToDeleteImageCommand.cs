@@ -3,12 +3,12 @@
 namespace TestingMonitor.Application.UseCases.Compilers.DeleteImage;
 
 /// <summary>
-/// Команда удаления образа компилятора.
+/// Command of a compiler docker image deletion
 /// </summary>
 public sealed class CompilerToDeleteImageCommand(int id) : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public int Id { get; set; } = id;
 }

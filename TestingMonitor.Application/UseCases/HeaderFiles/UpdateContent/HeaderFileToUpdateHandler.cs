@@ -1,13 +1,10 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.HeaderFiles.UpdateContent;
 
-/// <summary>
-/// Обработчик обновления теста.
-/// </summary>
 internal sealed class HeaderFileToUpdateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<HeaderFileToUpdateCommand, Unit>
 {
     public async Task<Unit> Handle(HeaderFileToUpdateCommand request, CancellationToken cancellationToken)
@@ -17,10 +14,10 @@ internal sealed class HeaderFileToUpdateHandler(IDbContext dbContext, IFileProvi
 
         if (headerFile == null)
         {
-            throw new ApiException("Header файла с данным идентификатором нет в базе.");
+            ErrorCode.HeaderFileNotFound.Throw();
         }
 
-        await fileProvider.UpdateContent(headerFile.Path, request.Content, cancellationToken);
+        await fileProvider.UpdateContent(headerFile!.Path, request.Content, cancellationToken);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

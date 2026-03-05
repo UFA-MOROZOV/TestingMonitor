@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Tests.Create;
 
-/// <summary>
-/// Обработчик обновления теста.
-/// </summary>
 internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToCreateCommand, Guid>
 {
     public async Task<Guid> Handle(TestToCreateCommand request, CancellationToken cancellationToken)
@@ -16,7 +13,7 @@ internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fi
         if (request.GroupId.HasValue
             && !await dbContext.TestGroups.AnyAsync(x => x.Id == request.GroupId, cancellationToken))
         {
-            throw new ApiException("Группы с таким идентификатором не существует.");
+            ErrorCode.TestGroupAlreadyExists.Throw();
         }
 
         var test = new Test
@@ -26,10 +23,14 @@ internal sealed class TestToCreateHandler(IDbContext dbContext, IFileProvider fi
             TestGroupId = request.GroupId
         };
 
-        var path = await fileProvider.CreateWithContent(request.Content, test.Id, cancellationToken)
-            ?? throw new ApiException("Не удалось сохранить файл.");
+        var path = await fileProvider.CreateWithContent(request.Content, test.Id, cancellationToken);
 
-        test.Path = path;
+        if (path == null)
+        {
+            ErrorCode.ErrorWithFileSaving.Throw();
+        }
+
+        test.Path = path!;
 
         await dbContext.Tests.AddAsync(test, cancellationToken);
 

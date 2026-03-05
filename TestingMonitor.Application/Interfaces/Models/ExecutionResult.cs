@@ -1,7 +1,7 @@
 ﻿namespace TestingMonitor.Application.Interfaces.Models;
 
 /// <summary>
-/// Результаты исполнения.
+/// Result of a test execution.
 /// </summary>
 public sealed class ExecutionResult
 {

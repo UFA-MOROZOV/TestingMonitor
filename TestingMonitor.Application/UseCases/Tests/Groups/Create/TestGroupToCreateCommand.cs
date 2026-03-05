@@ -3,17 +3,17 @@
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Create;
 
 /// <summary>
-/// Команда создания группы тестов.
+/// Command of creating a test group.
 /// </summary>
 public sealed class TestGroupToCreateCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Группа в которой будет находится эта группа.
+    /// Parent group Id.
     /// </summary>
     public Guid? ParentGroupId { get; set; }
 }

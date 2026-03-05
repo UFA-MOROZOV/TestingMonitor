@@ -1,47 +1,47 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Результат выполнения теста.
+/// Execution stats of a test.
 /// </summary>
 public sealed class TestExecution
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Идентификатор на выполнение.
+    /// Compiler task Id.
     /// </summary>
     public Guid CompilerTaskId { get; set; }
 
     /// <summary>
-    /// Задача на выполнение.
+    /// Compiler task.
     /// </summary>
     public CompilerTask? CompilerTask { get; set; }
 
     /// <summary>
-    /// Идентификатор теста.
+    /// Test Id.
     /// </summary>
     public Guid? TestId { get; set; }
 
     /// <summary>
-    /// Тест.
+    /// Test.
     /// </summary>
     public Test? Test { get; set; }
 
     /// <summary>
-    /// Время выполнения.
+    /// Duration.
     /// </summary>
     public TimeSpan Duration { get; set; }
 
     /// <summary>
-    /// Успешно ли.
+    /// Is test execution a success.
     /// </summary>
     public bool IsSuccessful { get; set; }
 
     /// <summary>
-    /// Сообщение об ошибке.
+    /// Output.
     /// </summary>
-    public string? ErrorMessage { get; set; }
+    public string? Output { get; set; }
 }

@@ -6,7 +6,7 @@ using TestingMonitor.Domain.Entities;
 namespace TestingMonitor.Application.Helpers;
 
 /// <summary>
-/// Вспомогательный класс для обработки ZIP архивов с тестами
+/// Helper class to work with zip archive.
 /// </summary>
 public sealed class ZipTestArchiveProcessor
 {
@@ -25,7 +25,7 @@ public sealed class ZipTestArchiveProcessor
     }
 
     /// <summary>
-    /// Обработать ZIP архив и создать/обновить группы и тесты
+    /// Process zip file.
     /// </summary>
     public async Task ProcessAsync(
         Stream zipStream,
@@ -38,9 +38,6 @@ public sealed class ZipTestArchiveProcessor
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    /// <summary>
-    /// Обработать все записи в архиве
-    /// </summary>
     private async Task ProcessArchiveEntriesAsync(
         ZipArchive archive,
         Guid? rootParentGroupId,
@@ -54,9 +51,6 @@ public sealed class ZipTestArchiveProcessor
         }
     }
 
-    /// <summary>
-    /// Получить отсортированные записи архива
-    /// </summary>
     private static List<ZipArchiveEntry> GetSortedEntries(ZipArchive archive)
     {
         return archive.Entries
@@ -65,9 +59,6 @@ public sealed class ZipTestArchiveProcessor
             .ToList();
     }
 
-    /// <summary>
-    /// Обработать одну запись в архиве
-    /// </summary>
     private async Task ProcessEntryAsync(
         ZipArchiveEntry entry,
         Guid? rootParentGroupId,
@@ -85,17 +76,11 @@ public sealed class ZipTestArchiveProcessor
         }
     }
 
-    /// <summary>
-    /// Нормализовать путь (заменить обратные слеши)
-    /// </summary>
     private static string NormalizePath(string path)
     {
         return path.Replace('\\', '/').TrimEnd('/');
     }
 
-    /// <summary>
-    /// Проверить, является ли запись папкой
-    /// </summary>
     private static bool IsFolderEntry(ZipArchiveEntry entry)
     {
         return entry.FullName.EndsWith("/") ||
@@ -103,19 +88,12 @@ public sealed class ZipTestArchiveProcessor
                entry.Length == 0 && string.IsNullOrEmpty(Path.GetExtension(entry.FullName));
     }
 
-    /// <summary>
-    /// Проверить, поддерживается ли файл как тест
-    /// </summary>
     private bool IsSupportedTestFile(ZipArchiveEntry entry)
     {
         var extension = Path.GetExtension(entry.Name);
         return !string.IsNullOrEmpty(extension) &&
                _supportedExtensions.Contains(extension);
     }
-
-    /// <summary>
-    /// Убедиться, что иерархия папок существует
-    /// </summary>
     private async Task EnsureFolderHierarchyExistsAsync(
         string folderPath,
         Guid? rootParentGroupId,
@@ -140,9 +118,6 @@ public sealed class ZipTestArchiveProcessor
         }
     }
 
-    /// <summary>
-    /// Построить накапливаемый путь
-    /// </summary>
     private static string BuildAccumulatedPath(string currentPath, string newPart)
     {
         return string.IsNullOrEmpty(currentPath)
@@ -150,9 +125,6 @@ public sealed class ZipTestArchiveProcessor
             : $"{currentPath}/{newPart}";
     }
 
-    /// <summary>
-    /// Получить или создать группу тестов
-    /// </summary>
     private async Task<TestGroup> GetOrCreateTestGroupAsync(
         string groupName,
         Guid? parentId,
@@ -177,9 +149,6 @@ public sealed class ZipTestArchiveProcessor
         return group;
     }
 
-    /// <summary>
-    /// Найти существующую группу тестов
-    /// </summary>
     private async Task<TestGroup?> FindExistingTestGroupAsync(
         string groupName,
         Guid? parentId,
@@ -192,9 +161,6 @@ public sealed class ZipTestArchiveProcessor
                 cancellationToken);
     }
 
-    /// <summary>
-    /// Создать новую группу тестов
-    /// </summary>
     private static TestGroup CreateNewTestGroup(string name, Guid? parentGroupId)
     {
         return new TestGroup
@@ -202,14 +168,11 @@ public sealed class ZipTestArchiveProcessor
             Id = Guid.NewGuid(),
             Name = name,
             ParentGroupId = parentGroupId,
-            Tests = new List<Test>(),
-            SubGroups = new List<TestGroup>()
+            Tests = [],
+            SubGroups = []
         };
     }
 
-    /// <summary>
-    /// Добавить группу в БД и родительскую группу
-    /// </summary>
     private async Task AddGroupToDatabaseAndParentAsync(
         TestGroup group,
         TestGroup? parentGroup,
@@ -223,9 +186,6 @@ public sealed class ZipTestArchiveProcessor
         }
     }
 
-    /// <summary>
-    /// Обработать файл теста
-    /// </summary>
     private async Task ProcessTestFileAsync(
         ZipArchiveEntry entry,
         string filePath,
@@ -245,9 +205,6 @@ public sealed class ZipTestArchiveProcessor
         await CreateTestFromFileAsync(entry, fileName, parentGroup, cancellationToken);
     }
 
-    /// <summary>
-    /// Получить родительскую группу для файла
-    /// </summary>
     private async Task<TestGroup?> GetParentGroupForFileAsync(
         string directoryPath,
         Guid? rootParentGroupId,
@@ -267,18 +224,12 @@ public sealed class ZipTestArchiveProcessor
             : null;
     }
 
-    /// <summary>
-    /// Найти группу тестов по ID
-    /// </summary>
     private async Task<TestGroup?> FindTestGroupByIdAsync(Guid groupId, CancellationToken cancellationToken)
     {
         return await _dbContext.TestGroups
             .FirstOrDefaultAsync(g => g.Id == groupId, cancellationToken);
     }
 
-    /// <summary>
-    /// Проверить, существует ли уже файл теста
-    /// </summary>
     private async Task<bool> TestFileAlreadyExistsAsync(
         string fileName,
         TestGroup? parentGroup,
@@ -293,9 +244,6 @@ public sealed class ZipTestArchiveProcessor
                 cancellationToken);
     }
 
-    /// <summary>
-    /// Создать тест из файла
-    /// </summary>
     private async Task CreateTestFromFileAsync(
         ZipArchiveEntry entry,
         string fileName,
@@ -322,9 +270,6 @@ public sealed class ZipTestArchiveProcessor
         await _dbContext.Tests.AddAsync(test, cancellationToken);
     }
 
-    /// <summary>
-    /// Сохранить файл в хранилище
-    /// </summary>
     private async Task<string?> SaveFileToStorageAsync(
         ZipArchiveEntry entry,
         Guid id,

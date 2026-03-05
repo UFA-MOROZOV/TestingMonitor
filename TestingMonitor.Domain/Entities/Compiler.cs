@@ -1,37 +1,37 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Компилятор.
+/// Compiler.
 /// </summary>
 public sealed class Compiler
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Имя образа.
+    /// Image name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Версия.
+    /// Version.
     /// </summary>
     public string Version { get; set; } = null!;
 
     /// <summary>
-    /// Имя команды.
+    /// Command to execute.
     /// </summary>
     public string CommandName { get; set; } = null!;
 
     /// <summary>
-    /// Полное имя образа с версией.
+    /// Full image name.
     /// </summary>
     public string ImageName { get; set;} = null!;
 
     /// <summary>
-    /// Есть ли локальный докер.
+    /// Is there a local docker.
     /// </summary>
     public bool HasDockerLocally { get; set; }
 }

@@ -1,12 +1,12 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Связь тест-header.
+/// Test and header file relation.
 /// </summary>
 public sealed class TestToHeaderFile
 {
     /// <summary>
-    /// Идентификатор header.
+    /// Header Id.
     /// </summary>
     public Guid HeaderId { get; set; }
 
@@ -16,12 +16,12 @@ public sealed class TestToHeaderFile
     public HeaderFile? HeaderFile { get; set; }
 
     /// <summary>
-    /// Идентификатор теста.
+    /// Test Id.
     /// </summary>
     public Guid TestId { get; set; }
 
     /// <summary>
-    /// Тест.
+    /// Test.
     /// </summary>
     public Test? Test { get; set; }
 }

@@ -3,12 +3,12 @@
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Delete;
 
 /// <summary>
-/// Команда удаления header файла.
+/// Comand of a header file deletion.
 /// </summary>
 public sealed class HeaderFileToDeleteCommand(Guid id) : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; } = id;
 }

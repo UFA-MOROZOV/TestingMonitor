@@ -1,32 +1,32 @@
 ﻿namespace TestingMonitor.Application.Interfaces;
 
 /// <summary>
-/// Провайдер файлов.
+/// Provider for working with files.
 /// </summary>
 public interface IFileProvider
 {
     /// <summary>
-    /// Загрузка файлов.
+    /// Upload a file.
     /// </summary>
     public Task<string?> UploadFileAsync(Stream stream, Guid guid, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Удаление файлов.
+    /// Delete a file.
     /// </summary>
-    public Task DeleteFileAsync(string path, CancellationToken cancellationToken);
+    public void DeleteFile(string path, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получение контента файла по пути.
+    /// Get content of a file at a specified path.
     /// </summary>
     public Task<string> GetContent(string path, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Обновление содержимого файла.
+    /// Update a files content.
     /// </summary>
     public Task UpdateContent(string path, string content, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Создание файла с содержимым.
+    /// Create a file from some text.
     /// </summary>
-    public Task<string> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken);
+    public Task<string?> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken);
 }

@@ -1,28 +1,28 @@
 ﻿namespace TestingMonitor.Application.UseCases.HeaderFiles.Get;
 
 /// <summary>
-/// Результат получения тестов.
+/// Result of getting header files
 /// </summary>
 public sealed class GetHeaderFilesResponse
 {
     /// <summary>
-    /// Подгруппы..
+    /// Header files
     /// </summary>
     public ICollection<HeaderFileDto> HeaderFiles { get; set; } = [];
 }
 
 /// <summary>
-/// Объект группы.
+/// Header file.
 /// </summary>
 public sealed class HeaderFileDto
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
-}   
+}

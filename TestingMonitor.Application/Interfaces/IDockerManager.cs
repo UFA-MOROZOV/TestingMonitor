@@ -5,7 +5,7 @@ namespace TestingMonitor.Application.Interfaces;
 
 public interface IDockerManager
 {
-    public Task<bool> ImageExistsAsync(string imageName, CancellationToken cancellationToken); 
+    public Task<bool> ImageExistsAsync(string imageName, CancellationToken cancellationToken);
 
     public Task<ExecutionResult> ExecuteCodeAsync(Compiler compiler, Guid runId, string code, CancellationToken cancellationToken);
 

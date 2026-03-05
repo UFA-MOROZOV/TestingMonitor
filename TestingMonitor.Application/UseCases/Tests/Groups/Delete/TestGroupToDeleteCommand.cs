@@ -3,12 +3,12 @@
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Delete;
 
 /// <summary>
-/// Команда удаления группы тестов.
+/// Command of a test group deletion.
 /// </summary>
 public sealed class TestGroupToDeleteCommand(Guid id) : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; } = id;
 }

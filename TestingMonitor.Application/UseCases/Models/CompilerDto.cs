@@ -1,32 +1,32 @@
 ﻿namespace TestingMonitor.Application.UseCases.Models;
 
 /// <summary>
-/// Компилятор.
+/// Compiler.
 /// </summary>
 public sealed class CompilerDto
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Имя образа.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Версия.
+    /// Version.
     /// </summary>
     public string Version { get; set; } = null!;
 
     /// <summary>
-    /// Имя команды.
+    /// Command to execute.
     /// </summary>
     public string CommandName { get; set; } = null!;
 
     /// <summary>
-    /// Есть ли локальный докер.
+    /// Does local docker image exist?
     /// </summary>
     public bool HasDockerLocally { get; set; }
 }

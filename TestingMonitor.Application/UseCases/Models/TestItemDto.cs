@@ -1,17 +1,17 @@
 ﻿namespace TestingMonitor.Application.UseCases.Models;
 
 /// <summary>
-/// Объект группы.
+/// Unit of a group.
 /// </summary>
 public sealed class TestItemDto
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 }

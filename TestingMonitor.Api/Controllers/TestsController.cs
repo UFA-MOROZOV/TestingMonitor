@@ -17,6 +17,7 @@ using TestingMonitor.Application.UseCases.Tests.Groups.UpdateHeaderFiles;
 using TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 using TestingMonitor.Application.UseCases.Tests.UpdateContent;
 using TestingMonitor.Application.UseCases.Tests.UpdateHeaderFiles;
+using TestingMonitor.Application.UseCases.Tests.Upload;
 
 namespace TestingMonitor.Api.Controllers;
 
@@ -25,7 +26,7 @@ namespace TestingMonitor.Api.Controllers;
 public sealed class TestsController(IMediator mediator) : Controller
 {
     /// <summary>
-    /// Получние тестов.
+    /// Get all tests.
     /// </summary>
     [HttpGet("/api/tests")]
     [ProducesResponseType<GetTestsResponse>(StatusCodes.Status200OK)]
@@ -34,7 +35,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(query, cancellationToken);
 
     /// <summary>
-    /// Загрузка теста через файл.
+    /// Upload a test.
     /// </summary>
     [HttpPost("/api/tests/upload")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
@@ -54,7 +55,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Создание теста.
+    /// Create a test.
     /// </summary>
     [HttpPost("/api/tests")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
@@ -62,7 +63,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>
-    /// Получение содержимого.
+    /// Get tests content.
     /// </summary>
     [HttpGet("/api/tests/{id:guid}/content")]
     [ProducesResponseType<GetTestContentByIdResponse>(StatusCodes.Status200OK)]
@@ -71,7 +72,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(new GetTestContentByIdQuery(id), cancellationToken);
 
     /// <summary>
-    /// Обновление теста.
+    /// Update a test.
     /// </summary>
     [HttpPut("/api/tests")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -83,7 +84,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Удаление теста.
+    /// Delete a test.
     /// </summary>
     [HttpDelete("/api/tests/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -95,7 +96,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Обновление header файлов теста.
+    /// Update test header files.
     /// </summary>
     [HttpPut("/api/tests/headerFiles")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -109,7 +110,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     #region Groups
 
     /// <summary>
-    /// Создание группы тестов.
+    /// Create a test group.
     /// </summary>
     [HttpPost("/api/testGroup")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -122,7 +123,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Удаление группы тестов.
+    /// Delete a test group.
     /// </summary>
     [HttpDelete("/api/testGroup/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -135,7 +136,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Загрузка группы тестов через зип.
+    /// Upload a test group using zip.
     /// </summary>
     [HttpPost("/api/testsgroups/upload")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -156,7 +157,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Обновление header файлов группы тестов.
+    /// Update test groups header files.
     /// </summary>
     [HttpPut("/api/testsgroups/headerFiles")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -173,7 +174,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     #region HeaderFiles
 
     /// <summary>
-    /// Получение header файлов.
+    /// Get all header files.
     /// </summary>
     [HttpGet("/api/headerFiles")]
     [ProducesResponseType<GetHeaderFilesResponse>(StatusCodes.Status200OK)]
@@ -182,7 +183,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(query, cancellationToken);
 
     /// <summary>
-    /// Загрузка header файла.
+    /// Upload a header file.
     /// </summary>
     [HttpPost("/api/headerFiles/upload")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
@@ -201,7 +202,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Создание header файла.
+    /// Create a header file.
     /// </summary>
     [HttpPost("/api/headerFiles")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
@@ -209,7 +210,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>
-    /// Удаление header файла.
+    /// Delete a header file.
     /// </summary>
     [HttpDelete("/api/headerFiles/{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -221,7 +222,7 @@ public sealed class TestsController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Получение содержимого header файла.
+    /// Get header files content.
     /// </summary>
     [HttpGet("/api/headerFiles/{id:guid}/content")]
     [ProducesResponseType<GetHeaderFileContentByIdResponse>(StatusCodes.Status200OK)]
@@ -230,7 +231,7 @@ public sealed class TestsController(IMediator mediator) : Controller
         => await mediator.Send(new GetHeaderFileContentByIdQuery(id), cancellationToken);
 
     /// <summary>
-    /// Обновление header файла.
+    /// Update a header file.
     /// </summary>
     [HttpPut("/api/headerFiles")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -3,27 +3,27 @@
 namespace TestingMonitor.Application.UseCases.Compilers.Create;
 
 /// <summary>
-/// Команда загрузки докера компилятора через tar.
+/// Command of a compiler creation.
 /// </summary>
 public sealed class CompilerToCreateCommand : IRequest<int>
 {
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Версия.
+    /// Version.
     /// </summary>
     public string Version { get; set; } = null!;
 
     /// <summary>
-    /// Имя команды.
+    /// Command to execute.
     /// </summary>
     public string CommandName { get; set; } = null!;
 
     /// <summary>
-    /// Имя образа.
+    /// Image name.
     /// </summary>
     public string ImageName { get; set; } = null!;
 

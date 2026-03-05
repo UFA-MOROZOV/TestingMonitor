@@ -3,22 +3,22 @@
 namespace TestingMonitor.Application.UseCases.HeaderFiles.GetContent;
 
 /// <summary>
-/// Результат получения содержимого header файла.
+/// Header file content.
 /// </summary>
-public sealed class GetHeaderFileContentByIdResponse: IRequest<Unit>
+public sealed class GetHeaderFileContentByIdResponse : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Контент.
+    /// Content.
     /// </summary>
     public string Content { get; set; } = null!;
 }

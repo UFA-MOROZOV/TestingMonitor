@@ -5,12 +5,12 @@ using TestingMonitor.Domain.Entities;
 namespace TestingMonitor.Infrastructure.Services;
 
 /// <summary>
-/// Сервис выполнения задач.
+/// Task execution service.
 /// </summary>
 internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerManager)
 {
     /// <summary>
-    /// Выполняет задачу.
+    /// Execute a task.
     /// </summary>
     public async Task ExecuteTaskAsync(Guid taskId, CancellationToken cancellationToken)
     {
@@ -75,7 +75,7 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
             Id = testRunId,
             CompilerTaskId = taskId,
             TestId = testId,
-            ErrorMessage = output.Message,
+            Output = output.Message,
             Duration = output.Duration,
             IsSuccessful = string.IsNullOrEmpty(output.Message),
         };

@@ -4,9 +4,6 @@ using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.Tests.Delete;
 
-/// <summary>
-/// Обработчик удаления теста.
-/// </summary>
 internal sealed class TestToDeleteHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<TestToDeleteCommand, Unit>
 {
     public async Task<Unit> Handle(TestToDeleteCommand request, CancellationToken cancellationToken)
@@ -19,7 +16,7 @@ internal sealed class TestToDeleteHandler(IDbContext dbContext, IFileProvider fi
             return Unit.Value;
         }
 
-        await fileProvider.DeleteFileAsync(test.Path, cancellationToken);
+        fileProvider.DeleteFile(test.Path, cancellationToken);
 
         dbContext.Tests.Remove(test);
 
