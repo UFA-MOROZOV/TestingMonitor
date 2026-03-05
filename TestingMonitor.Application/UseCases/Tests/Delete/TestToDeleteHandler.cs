@@ -16,7 +16,7 @@ internal sealed class TestToDeleteHandler(IDbContext dbContext, IFileProvider fi
             return Unit.Value;
         }
 
-        await fileProvider.DeleteFileAsync(test.Path, cancellationToken);
+        fileProvider.DeleteFile(test.Path, cancellationToken);
 
         dbContext.Tests.Remove(test);
 

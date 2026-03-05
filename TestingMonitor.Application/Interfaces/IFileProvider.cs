@@ -13,7 +13,7 @@ public interface IFileProvider
     /// <summary>
     /// Delete a file.
     /// </summary>
-    public Task DeleteFileAsync(string path, CancellationToken cancellationToken);
+    public void DeleteFile(string path, CancellationToken cancellationToken);
 
     /// <summary>
     /// Get content of a file at a specified path.
@@ -28,5 +28,5 @@ public interface IFileProvider
     /// <summary>
     /// Create a file from some text.
     /// </summary>
-    public Task<string> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken);
+    public Task<string?> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken);
 }

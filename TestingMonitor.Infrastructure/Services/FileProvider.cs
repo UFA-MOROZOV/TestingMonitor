@@ -11,7 +11,7 @@ internal sealed class FileProvider : IFileProvider
 {
     private readonly string _folder = "Files";
 
-    public async Task<string> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken)
+    public async Task<string?> CreateWithContent(string content, Guid guid, CancellationToken cancellationToken)
     {
         try
         {
@@ -26,14 +26,14 @@ internal sealed class FileProvider : IFileProvider
 
             return path;
         }
-        catch (Exception ex)
+        catch
         {
             return null;
         }
     }
 
     /// <inheritdoc/>
-    public async Task DeleteFileAsync(string path, CancellationToken cancellationToken)
+    public void DeleteFile(string path, CancellationToken cancellationToken)
     {
         try
         {
@@ -42,7 +42,7 @@ internal sealed class FileProvider : IFileProvider
                 File.Delete(path);
             }
         }
-        catch (Exception ex)
+        catch 
         {
             return;
         }
@@ -76,7 +76,7 @@ internal sealed class FileProvider : IFileProvider
 
             return path;
         }
-        catch (Exception ex)
+        catch
         {
             return null;
         }

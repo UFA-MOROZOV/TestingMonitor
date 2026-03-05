@@ -16,7 +16,7 @@ internal sealed class HeaderFileToDeleteHandler(IDbContext dbContext, IFileProvi
             return Unit.Value;
         }
 
-        await fileProvider.DeleteFileAsync(headerFile.Path, cancellationToken);
+        fileProvider.DeleteFile(headerFile.Path, cancellationToken);
 
         dbContext.HeaderFiles.Remove(headerFile);
 

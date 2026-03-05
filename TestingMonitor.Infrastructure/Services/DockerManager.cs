@@ -219,7 +219,6 @@ internal sealed class DockerManager : IDockerManager
 
     #region private
 
-    [Obsolete]
     private async Task MonitorContainerStatsAsync(
         string containerId,
         List<ContainerStatsData> statsHistory,
@@ -231,6 +230,7 @@ internal sealed class DockerManager : IDockerManager
             {
                 try
                 {
+#pragma warning disable CS0618
                     using (var stream = await Client.Containers.GetContainerStatsAsync(
                         containerId,
                         new ContainerStatsParameters { Stream = false },
@@ -251,6 +251,7 @@ internal sealed class DockerManager : IDockerManager
                                          $"Mem: {stats.MemoryUsageMB,5:F1}/{stats.MemoryLimitMB,5:F1} MB ({stats.MemoryPercentage:F1}%)      ");
                         }
                     }
+#pragma warning restore CS0618
 
                     await Task.Delay(10, cancellationToken);
                 }
