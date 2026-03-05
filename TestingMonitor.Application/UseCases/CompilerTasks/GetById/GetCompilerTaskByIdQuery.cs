@@ -2,13 +2,13 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.CompilerTasks.GetById;
 
 /// <summary>
-/// Запрос получения задачи компилятора.
+/// Query of getting compiler task.
 /// </summary>
 public sealed class GetCompilerTaskByIdQuery(Guid id) : IRequest<GetCompilerTaskByIdResponse>
 {
@@ -24,10 +24,10 @@ public sealed class GetCompilerTaskByIdQuery(Guid id) : IRequest<GetCompilerTask
 
             if (compilerTask == null)
             {
-                throw new ApiException("Задача компилятора с такими данными не существует.");
+                ErrorCode.CompilerTaskNotFound.Throw();
             }
 
-            return compilerTask;
+            return compilerTask!;
         }
     }
 }

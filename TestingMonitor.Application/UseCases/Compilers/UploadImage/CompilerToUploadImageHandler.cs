@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Compilers.UploadImage;
 
-/// <summary>
-/// Обработчик загрузки образа компилятора.
-/// </summary>
-public sealed class CompilerToUploadImageHandler (IDbContext dbContext, IDockerManager dockerManager)
+public sealed class CompilerToUploadImageHandler(IDbContext dbContext, IDockerManager dockerManager)
     : IRequestHandler<CompilerToUploadImageCommand, Unit>
 {
     public async Task<Unit> Handle(CompilerToUploadImageCommand request, CancellationToken cancellationToken)
@@ -18,7 +15,7 @@ public sealed class CompilerToUploadImageHandler (IDbContext dbContext, IDockerM
 
         if (compiler == null)
         {
-            throw new ApiException("Компилятор с такими данными не существует.");
+            ErrorCode.CompilerNotFound.Throw();
         }
 
         if (await dockerManager.ImageExistsAsync(compiler!.ImageName, cancellationToken))
@@ -30,14 +27,14 @@ public sealed class CompilerToUploadImageHandler (IDbContext dbContext, IDockerM
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
 
-            throw new ApiException($"Образ {compiler.ImageName} уже существует.");
+            ErrorCode.CompilerStart.Throw($"Image {compiler.ImageName} already exists.");
         }
 
         var result = await dockerManager.LoadDockerImageAsync(request.Stream, cancellationToken);
 
         if (!result)
         {
-            throw new ApiException("Не удалось загрузить компилятор.");
+            ErrorCode.CompilerStart.Throw($"Image {compiler.ImageName} cannot be downloaded.");
         }
 
         compiler.HasDockerLocally = true;

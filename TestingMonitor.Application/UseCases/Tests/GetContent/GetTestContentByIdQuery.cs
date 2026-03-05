@@ -1,17 +1,17 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Tests.GetContent;
 
 /// <summary>
-/// Запрос на получение содержимого теста.
+/// Query of getting a test content.
 /// </summary>
-public sealed class GetTestContentByIdQuery(Guid id): IRequest<GetTestContentByIdResponse>
+public sealed class GetTestContentByIdQuery(Guid id) : IRequest<GetTestContentByIdResponse>
 {
     /// <summary>
-    /// Идентификатор теста.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; } = id;
 
@@ -24,12 +24,12 @@ public sealed class GetTestContentByIdQuery(Guid id): IRequest<GetTestContentByI
 
             if (test == null)
             {
-                throw new ApiException("Теста с данным идентификатором нет в базе.");
+                ErrorCode.TestNotFound.Throw();
             }
 
             return new GetTestContentByIdResponse
             {
-                Id = test.Id,
+                Id = test!.Id,
                 Name = test.Name,
                 Content = await fileProvider.GetContent(test.Path, cancellationToken),
                 TestGroupId = test.TestGroupId

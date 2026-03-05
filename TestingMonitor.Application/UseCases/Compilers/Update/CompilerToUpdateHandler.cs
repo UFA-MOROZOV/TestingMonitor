@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
-using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Compilers.Update;
 
@@ -18,7 +17,7 @@ internal sealed class CompilerToUpdateHandler(IDbContext dbContext, IMapper mapp
 
         if (compiler == null)
         {
-            throw new ApiException("No compiler found");
+            ErrorCode.CompilerNotFound.Throw();
         }
 
         mapper.Map(compiler, compiler);

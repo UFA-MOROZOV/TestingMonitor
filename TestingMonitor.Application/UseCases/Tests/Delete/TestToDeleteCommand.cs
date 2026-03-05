@@ -3,12 +3,12 @@
 namespace TestingMonitor.Application.UseCases.Tests.Delete;
 
 /// <summary>
-/// Команда удаления теста.
+/// Command of a test deletion.
 /// </summary>
 public sealed class TestToDeleteCommand(Guid id) : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; } = id;
 }

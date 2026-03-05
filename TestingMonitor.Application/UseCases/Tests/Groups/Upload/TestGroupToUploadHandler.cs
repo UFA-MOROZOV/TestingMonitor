@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Helpers;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 
-/// <summary>
-/// Обработчик загрузки зип с тестами. 
-/// </summary>
 internal sealed class TestGroupToUploadHandler(IDbContext dbContext, IFileProvider fileProvider)
     : IRequestHandler<TestGroupToUploadCommand, Unit>
 {
@@ -17,7 +14,7 @@ internal sealed class TestGroupToUploadHandler(IDbContext dbContext, IFileProvid
         if (request.GroupId.HasValue && !await dbContext.TestGroups.AnyAsync(x => request.GroupId == x.Id,
             cancellationToken))
         {
-            throw new ApiException("Нет группы родителя.");
+            ErrorCode.TestGroupNotFound.Throw();
         }
 
         var processor = new ZipTestArchiveProcessor(dbContext, fileProvider);

@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Tests.UpdateHeaderFiles;
 
@@ -16,7 +16,7 @@ internal sealed class TestToUpdateHeaderFilesHandler(IDbContext dbContext) : IRe
 
         if (test == null)
         {
-            throw new ApiException("Теста с данным идентификатором нет в базе.");
+            ErrorCode.TestNotFound.Throw();
         }
 
         request.HeaderIds = request.HeaderIds.Distinct().ToList();
@@ -28,10 +28,10 @@ internal sealed class TestToUpdateHeaderFilesHandler(IDbContext dbContext) : IRe
 
         if (existingHeaders.Count != request.HeaderIds.Count)
         {
-            throw new ApiException("Не все header файлы есть в базе.");
+            ErrorCode.HeaderFileNotFound.Throw();
         }
 
-        test.HeaderFiles = test.HeaderFiles
+        test!.HeaderFiles = test.HeaderFiles
             .Where(x => existingHeaders.Contains(x.HeaderId))
             .ToList();
 
@@ -45,7 +45,7 @@ internal sealed class TestToUpdateHeaderFilesHandler(IDbContext dbContext) : IRe
                 TestId = test.Id
             });
         }
-        
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

@@ -7,7 +7,7 @@ namespace TestingMonitor.Application.UseCases.Compilers.DownloadDocker;
 /// <summary>
 /// Обработчик загрузки докера компилятора.
 /// </summary>
-internal sealed class CompilerToDownloadDockerHandler (IDbContext dbContext, IDockerManager dockerManager)
+internal sealed class CompilerToDownloadDockerHandler(IDbContext dbContext, IDockerManager dockerManager)
     : IRequestHandler<CompilerToDownloadDockerCommand, Unit>
 {
     /// <inheritdoc/>
@@ -18,7 +18,7 @@ internal sealed class CompilerToDownloadDockerHandler (IDbContext dbContext, IDo
 
         if (compiler == null || compiler.HasDockerLocally)
         {
-            return Unit.Value; 
+            return Unit.Value;
         }
 
         var output = await dockerManager.DownloadCompilerAsync(compiler, cancellationToken);

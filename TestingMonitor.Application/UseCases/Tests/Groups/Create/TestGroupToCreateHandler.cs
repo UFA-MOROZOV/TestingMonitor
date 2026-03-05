@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Create;
 
-/// <summary>
-/// Обработчик создания группы тестов.
-/// </summary>
 internal sealed class TestGroupToCreateHandler(IDbContext dbContext) : IRequestHandler<TestGroupToCreateCommand, Guid>
 {
     public async Task<Guid> Handle(TestGroupToCreateCommand request, CancellationToken cancellationToken)
@@ -16,7 +13,7 @@ internal sealed class TestGroupToCreateHandler(IDbContext dbContext) : IRequestH
         if (request.ParentGroupId.HasValue
             && !await dbContext.TestGroups.AnyAsync(x => x.Id == request.ParentGroupId, cancellationToken))
         {
-            throw new ApiException("Нет группы родителя.");
+            ErrorCode.TestGroupNotFound.Throw();
         }
 
         var newGroup = new TestGroup

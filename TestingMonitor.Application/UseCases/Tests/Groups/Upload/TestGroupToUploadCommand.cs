@@ -3,17 +3,17 @@
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Upload;
 
 /// <summary>
-/// Команда загрузки групы тестов через зип файл.
+/// Command of uploading a test group.
 /// </summary>
 public sealed class TestGroupToUploadCommand : IRequest<Unit>
 {
     /// <summary>
-    /// Поток с зип файлом.
+    /// File stream.
     /// </summary>
     public Stream Stream { get; set; } = null!;
 
     /// <summary>
-    /// Идентификатор группы, в которой будут находиться тесты.
+    /// Group Id.
     /// </summary>
     public Guid? GroupId { get; set; }
 }

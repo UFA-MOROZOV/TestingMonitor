@@ -8,7 +8,7 @@ using TestingMonitor.Application.UseCases.Models;
 namespace TestingMonitor.Application.UseCases.Tests.Get;
 
 /// <summary>
-/// Запрос на получение тестов.
+/// Query 
 /// </summary>
 public sealed class GetTestsQuery : IRequest<GetTestsResponse>
 {

@@ -3,17 +3,17 @@
 namespace TestingMonitor.Application.UseCases.Tests.UpdateHeaderFiles;
 
 /// <summary>
-/// Команда обновления header файлов теста.
+/// Command of updating header files list for a test.
 /// </summary>
 public sealed class TestToUpdateHeaderFilesCommand : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор теста.
+    /// Test Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Идентификаторы header файлов.
+    /// Header files ids.
     /// </summary>
     public List<Guid> HeaderIds { get; set; } = [];
 }

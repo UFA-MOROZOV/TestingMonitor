@@ -1,22 +1,22 @@
 ﻿namespace TestingMonitor.Application.UseCases.CompilerTasks.Get;
 
 /// <summary>
-/// Задача.
+/// Execution task of a compiler.
 /// </summary>
 public sealed class CompilerTaskDto
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Выполнен ли.
+    /// Is it completed?
     /// </summary>
     public bool IsCompleted { get; set; }
 }

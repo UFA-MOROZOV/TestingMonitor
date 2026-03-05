@@ -1,13 +1,10 @@
 ﻿using MediatR;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Upload;
 
-/// <summary>
-/// Обработчик добавления header файла.
-/// </summary>
 internal sealed class HeaderFileToUploadHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<HeaderFileToUploadCommand, Guid>
 {
     public async Task<Guid> Handle(HeaderFileToUploadCommand request, CancellationToken cancellationToken)
@@ -18,10 +15,14 @@ internal sealed class HeaderFileToUploadHandler(IDbContext dbContext, IFileProvi
             Name = request.Name
         };
 
-        var path = await fileProvider.UploadFileAsync(request.Stream, HeaderFile.Id, cancellationToken)
-            ?? throw new ApiException("Не удалось сохранить файл.");
+        var path = await fileProvider.UploadFileAsync(request.Stream, HeaderFile.Id, cancellationToken);
 
-        HeaderFile.Path = path;
+        if (path == null)
+        {
+            ErrorCode.ErrorWithFileSaving.Throw();
+        }
+
+        HeaderFile.Path = path!;
 
         await dbContext.HeaderFiles.AddAsync(HeaderFile, cancellationToken);
 

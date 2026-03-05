@@ -1,37 +1,37 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.HeaderFiles.GetContent;
 
 /// <summary>
-/// Запрос на получение содержимого header файла.
+/// Query of getting header file content.
 /// </summary>
 public sealed class GetHeaderFileContentByIdQuery(Guid id) : IRequest<GetHeaderFileContentByIdResponse>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; } = id;
 
     private class Handler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<GetHeaderFileContentByIdQuery, GetHeaderFileContentByIdResponse>
     {
-        public async Task<GetHeaderFileContentByIdResponse> Handle(GetHeaderFileContentByIdQuery request, CancellationToken cancellationToken) 
+        public async Task<GetHeaderFileContentByIdResponse> Handle(GetHeaderFileContentByIdQuery request, CancellationToken cancellationToken)
         {
-            var HeaderFile = await dbContext.HeaderFiles
+            var headerFile = await dbContext.HeaderFiles
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if (HeaderFile == null)
+            if (headerFile == null)
             {
-                throw new ApiException("Теста с данным идентификатором нет в базе.");
+                ErrorCode.HeaderFileNotFound.Throw();
             }
 
             return new GetHeaderFileContentByIdResponse
             {
-                Id = HeaderFile.Id,
-                Name = HeaderFile.Name,
-                Content = await fileProvider.GetContent(HeaderFile.Path, cancellationToken),
+                Id = headerFile!.Id,
+                Name = headerFile.Name,
+                Content = await fileProvider.GetContent(headerFile.Path, cancellationToken),
             };
         }
     }

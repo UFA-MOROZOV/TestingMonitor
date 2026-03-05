@@ -1,50 +1,49 @@
 ﻿using TestingMonitor.Application.UseCases.Models;
-using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Application.UseCases.CompilerTasks.GetById;
 
 /// <summary>
-/// Результат получения задачи компилятора.
+/// Compiler task.
 /// </summary>
 public sealed class GetCompilerTaskByIdResponse
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Компилятор.
+    /// Used compiler.
     /// </summary>
     public CompilerDto Compiler { get; set; } = null!;
 
     /// <summary>
-    /// Дата создания.
+    /// Date of creation.
     /// </summary>
     public DateTime DateOfCreation { get; set; }
 
     /// <summary>
-    /// Дата начала.
+    /// Date of beginning of execution.
     /// </summary>
     public DateTime? DateOfStart { get; set; }
 
     /// <summary>
-    /// Дата окончания.
+    /// Date of completion.
     /// </summary>
     public DateTime? DateOfCompletion { get; set; }
 
     /// <summary>
-    /// Тест.
+    /// Test.
     /// </summary>
     public TestItemDto? Test { get; set; }
 
     /// <summary>
-    /// Группа тестов.
+    /// Test group.
     /// </summary>
     public TestItemDto? TestGroup { get; set; }
 
     /// <summary>
-    /// Выполненные тесты.
+    /// Executed tests.
     /// </summary>
     public ICollection<TestExecutionDto> TestsExecuted { get; set; } = [];
 }
@@ -52,22 +51,22 @@ public sealed class GetCompilerTaskByIdResponse
 public sealed class TestExecutionDto
 {
     /// <summary>
-    /// Тест.
+    /// Test.
     /// </summary>
     public TestItemDto? Test { get; set; }
 
     /// <summary>
-    /// Время выполнения.
+    /// Duration of a test.
     /// </summary>
     public TimeSpan Duration { get; set; }
 
     /// <summary>
-    /// Успешно ли.
+    /// Is it successful.
     /// </summary>
     public bool IsSuccessful { get; set; }
 
     /// <summary>
-    /// Вывод.
+    /// Output string.
     /// </summary>
     public string? Output { get; set; }
 }

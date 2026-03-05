@@ -11,7 +11,7 @@ namespace TestingMonitor.Application.UseCases.CompilerTasks.Get;
 /// </summary>
 public sealed class GetCompilerTasksQuery : IRequest<List<CompilerTaskDto>>
 {
-    private sealed class Handler (IDbContext dbContext, IMapper mapper) : IRequestHandler<GetCompilerTasksQuery, List<CompilerTaskDto>>
+    private sealed class Handler(IDbContext dbContext, IMapper mapper) : IRequestHandler<GetCompilerTasksQuery, List<CompilerTaskDto>>
     {
         public async Task<List<CompilerTaskDto>> Handle(GetCompilerTasksQuery request, CancellationToken cancellationToken)
         {

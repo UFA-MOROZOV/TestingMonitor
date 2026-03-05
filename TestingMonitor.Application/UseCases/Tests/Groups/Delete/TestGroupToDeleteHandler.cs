@@ -4,9 +4,6 @@ using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.Tests.Groups.Delete;
 
-/// <summary>
-/// Обработчик удаления группы тестов.
-/// </summary>
 internal sealed class TestGroupToDeleteHandler(IDbContext dbContext, IFileProvider fileProvider)
     : IRequestHandler<TestGroupToDeleteCommand, Unit>
 {

@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Compilers.DeleteImage;
 
-internal sealed class CompilerToDeleteImageHandler (IDockerManager dockerManager, IDbContext dbContext) 
+internal sealed class CompilerToDeleteImageHandler(IDockerManager dockerManager, IDbContext dbContext)
     : IRequestHandler<CompilerToDeleteImageCommand, Unit>
 {
     public async Task<Unit> Handle(CompilerToDeleteImageCommand command, CancellationToken cancellationToken)
@@ -15,10 +15,10 @@ internal sealed class CompilerToDeleteImageHandler (IDockerManager dockerManager
 
         if (compiler == null)
         {
-            throw new ApiException("Компилятор с такими данными не существует.");
+            ErrorCode.CompilerAlreadyExists.Throw();
         }
 
-        if (!compiler.HasDockerLocally)
+        if (!compiler!.HasDockerLocally)
         {
             return Unit.Value;
         }
@@ -27,7 +27,7 @@ internal sealed class CompilerToDeleteImageHandler (IDockerManager dockerManager
         {
             if (!await dockerManager.DeleteDockerImageAsync(compiler, cancellationToken))
             {
-                throw new ApiException($"Не получилось удалить образ.");
+                ErrorCode.CannotDeleteImage.Throw();
             }
         }
 

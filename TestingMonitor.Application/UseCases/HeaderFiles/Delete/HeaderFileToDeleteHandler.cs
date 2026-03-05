@@ -4,9 +4,6 @@ using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Delete;
 
-/// <summary>
-/// Обработчик удаления header файла.
-/// </summary>
 internal sealed class HeaderFileToDeleteHandler(IDbContext dbContext, IFileProvider fileProvider) : IRequestHandler<HeaderFileToDeleteCommand, Unit>
 {
     public async Task<Unit> Handle(HeaderFileToDeleteCommand request, CancellationToken cancellationToken)

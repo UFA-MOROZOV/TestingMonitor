@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TestingMonitor.Application.Exceptions;
 using TestingMonitor.Application.Interfaces;
 using TestingMonitor.Domain.Entities;
+using TestingMonitor.Domain.Enums;
 
 namespace TestingMonitor.Application.UseCases.Compilers.Create;
 
@@ -15,7 +15,7 @@ internal sealed class CompilerToCreateHandler(IDbContext dbContext, IDockerManag
         if (await dbContext.Compilers
             .AnyAsync(x => x.Name == command.Name && x.Version == command.Version, cancellationToken))
         {
-            throw new ApiException("Компилятор с такими данными уже существует.");
+            ErrorCode.CompilerAlreadyExists.Throw();
         }
 
         var compiler = new Compiler

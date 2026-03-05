@@ -3,22 +3,22 @@
 namespace TestingMonitor.Application.UseCases.Tests.UpdateContent;
 
 /// <summary>
-/// Запрос на обновление данных теста.
+/// Command of updating a test.
 /// </summary>
 public sealed class TestToUpdateCommand : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Контент.
+    /// Content.
     /// </summary>
     public string Content { get; set; } = null!;
 }

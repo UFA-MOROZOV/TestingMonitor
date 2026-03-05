@@ -3,22 +3,22 @@
 namespace TestingMonitor.Application.UseCases.Tests.Create;
 
 /// <summary>
-/// Запрос на создание теста.
+/// Command of creating a test.
 /// </summary>
 public sealed class TestToCreateCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Контент.
+    /// Content.
     /// </summary>
     public string Content { get; set; } = null!;
 
     /// <summary>
-    /// Идентификатор группы.
+    /// Group Id.
     /// </summary>
     public Guid? GroupId { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿namespace TestingMonitor.Application.Exceptions;
+﻿namespace TestingMonitor.Domain.Exceptions;
 
 /// <summary>
 /// Exception inside an api.

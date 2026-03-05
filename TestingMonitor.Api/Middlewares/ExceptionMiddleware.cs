@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using TestingMonitor.Application.Exceptions;
+using TestingMonitor.Domain.Exceptions;
 
 namespace TestingMonitor.Api.Middlewares;
 

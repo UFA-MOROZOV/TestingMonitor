@@ -3,17 +3,17 @@
 namespace TestingMonitor.Application.UseCases.HeaderFiles.Create;
 
 /// <summary>
-/// Запрос на создание header файла.
+/// Command of a header file creation.
 /// </summary>
 public sealed class HeaderFileToCreateCommand : IRequest<Guid>
 {
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Контент.
+    /// Content of a files.
     /// </summary>
     public string Content { get; set; } = null!;
 }
