@@ -3,12 +3,12 @@
 namespace TestingMonitor.Application.UseCases.Compilers.Delete;
 
 /// <summary>
-/// Команда удаления компилятора.
+/// Comand of a compiler deletion.
 /// </summary>
 public sealed class CompilerToDeleteCommand(int id) : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public int Id { get; set; } = id;
 }

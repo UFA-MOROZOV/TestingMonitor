@@ -1,32 +1,32 @@
 ﻿namespace TestingMonitor.Domain.Entities;
 
 /// <summary>
-/// Файлы Header.
+/// Header file.
 /// </summary>
 public sealed class HeaderFile
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Путь до файла.
+    /// Path to file.
     /// </summary>
     public string Path { get; set; } = null!;
 
     /// <summary>
-    /// Группы тестов.
+    /// Test groups.
     /// </summary>
     public ICollection<TestGroupToHeaderFile> TestGroups { get; set; } = [];
 
     /// <summary>
-    /// Тесты.
+    /// Tests.
     /// </summary>
     public ICollection<TestToHeaderFile> Tests { get; set; } = [];
 }

@@ -5,9 +5,6 @@ using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.Compilers.Delete;
 
-/// <summary>
-/// Обработчик удаления компилятора.
-/// </summary>
 internal sealed class CompilerToDeleteHandler (IDockerManager dockerManager, IDbContext dbContext) 
     : IRequestHandler<CompilerToDeleteCommand, Unit>
 {

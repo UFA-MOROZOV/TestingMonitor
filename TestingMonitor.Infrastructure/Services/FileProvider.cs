@@ -5,7 +5,7 @@ using TestingMonitor.Application.Interfaces;
 namespace TestingMonitor.Infrastructure.Services;
 
 /// <summary>
-/// Провайдер по работе с файлами.
+/// Service responsible for working with files.
 /// </summary>
 internal sealed class FileProvider : IFileProvider
 {

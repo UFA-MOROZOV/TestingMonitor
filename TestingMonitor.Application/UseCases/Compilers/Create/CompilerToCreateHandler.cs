@@ -6,9 +6,6 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Application.UseCases.Compilers.Create;
 
-/// <summary>
-/// Обработчик загрузки докера компилятора.
-/// </summary>
 internal sealed class CompilerToCreateHandler(IDbContext dbContext, IDockerManager dockerManager)
     : IRequestHandler<CompilerToCreateCommand, int>
 {

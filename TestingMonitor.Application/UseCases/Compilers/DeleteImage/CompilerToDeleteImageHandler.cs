@@ -5,9 +5,6 @@ using TestingMonitor.Application.Interfaces;
 
 namespace TestingMonitor.Application.UseCases.Compilers.DeleteImage;
 
-/// <summary>
-/// Обработчик удаления образа компилятора.
-/// </summary>
 internal sealed class CompilerToDeleteImageHandler (IDockerManager dockerManager, IDbContext dbContext) 
     : IRequestHandler<CompilerToDeleteImageCommand, Unit>
 {

@@ -19,7 +19,7 @@ namespace TestingMonitor.Api.Controllers;
 public sealed class CompilersController(IMediator mediator) : Controller
 {
     /// <summary>
-    /// Получение всех компиляторов.
+    /// Get all compilers.
     /// </summary>
     [HttpGet("/api/compilers")]
     [ProducesResponseType<List<CompilerDto>>(StatusCodes.Status200OK)]
@@ -27,7 +27,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
         => await mediator.Send(new GetCompilersQuery(), cancellationToken);
 
     /// <summary>
-    /// Создание компилятора.
+    /// Create a compiler.
     /// </summary>
     [HttpPost("/api/compilers")]
     [ProducesResponseType<int>(StatusCodes.Status200OK)]
@@ -36,7 +36,6 @@ public sealed class CompilersController(IMediator mediator) : Controller
         if (!ModelState.IsValid)
         {
             var errors = ModelState.Values.SelectMany(v => v.Errors).ToList();
-            // Log errors or return BadRequest with details
             return BadRequest(ModelState);
         }
 
@@ -68,7 +67,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Обновление данных компилятора.
+    /// Update compiler data.
     /// </summary>
     [HttpPut("/api/compilers")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -80,7 +79,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Выполнение кода компилятором.
+    /// Execute code using compiler.
     /// </summary>
     [HttpPost("/api/compilers/execute")]
     [ProducesResponseType<string>(StatusCodes.Status200OK)]
@@ -88,7 +87,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>
-    /// Выполнение кода компилятором.
+    /// Create an execution task for a compiler.
     /// </summary>
     [HttpPost("/api/compilers/executeTask")]
     [ProducesResponseType<Guid>(StatusCodes.Status200OK)]
@@ -96,7 +95,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
         => await mediator.Send(command, cancellationToken);
 
     /// <summary>
-    /// Удаление компилятора.
+    /// Delete a compiler.
     /// </summary>
     [HttpDelete("/api/compilers/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -108,7 +107,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Удаление образа компилятора.
+    /// Delete a compiler image.
     /// </summary>
     [HttpDelete("/api/compilers/{id:int}/image")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -120,7 +119,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Загрузка докера компилятора.
+    /// Download a compiler code.
     /// </summary>
     [HttpPut("/api/compilers/{id:int}/download")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -132,7 +131,7 @@ public sealed class CompilersController(IMediator mediator) : Controller
     }
 
     /// <summary>
-    /// Загрузка образа компилятора через файл.
+    /// Upload a compiler using a file.
     /// </summary>
     [HttpPut("/api/compilers/{id:int}/uploadFile")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
