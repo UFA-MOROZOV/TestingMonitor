@@ -9,9 +9,9 @@ namespace TestingMonitor.Application.UseCases.Compilers.UploadImage;
 /// Обработчик загрузки образа компилятора.
 /// </summary>
 public sealed class CompilerToUploadImageHandler (IDbContext dbContext, IDockerManager dockerManager)
-    : IRequestHandler<CompilertToUploadImageCommand, Unit>
+    : IRequestHandler<CompilerToUploadImageCommand, Unit>
 {
-    public async Task<Unit> Handle(CompilertToUploadImageCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CompilerToUploadImageCommand request, CancellationToken cancellationToken)
     {
         var compiler = await dbContext.Compilers
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);

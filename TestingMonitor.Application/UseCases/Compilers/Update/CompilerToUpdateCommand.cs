@@ -3,27 +3,27 @@
 namespace TestingMonitor.Application.UseCases.Compilers.Update;
 
 /// <summary>
-/// Команда загрузки докера компилятора через tar.
+/// Command of updating a compiler.
 /// </summary>
 public sealed class CompilerToUpdateCommand : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Имя.
+    /// Name.
     /// </summary>
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Версия.
+    /// Version.
     /// </summary>
     public string Version { get; set; } = null!;
 
     /// <summary>
-    /// Имя команды.
+    /// Command to execute.
     /// </summary>
     public string CommandName { get; set; } = null!;
 }

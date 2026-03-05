@@ -7,9 +7,6 @@ using TestingMonitor.Domain.Entities;
 
 namespace TestingMonitor.Application.UseCases.Compilers.Update;
 
-/// <summary>
-/// Обработчик загрузки докера компилятора.
-/// </summary>
 internal sealed class CompilerToUpdateHandler(IDbContext dbContext, IMapper mapper)
     : IRequestHandler<CompilerToUpdateCommand, Unit>
 {

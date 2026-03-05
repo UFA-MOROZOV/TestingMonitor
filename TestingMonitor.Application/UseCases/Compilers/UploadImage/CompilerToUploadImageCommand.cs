@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 
 namespace TestingMonitor.Application.UseCases.Compilers.UploadImage;
 
 /// <summary>
-/// Команда загрузки образа компилятора.
+/// Command of uploading a compiler image.
 /// </summary>
-public sealed class CompilertToUploadImageCommand : IRequest<Unit>
+public sealed class CompilerToUploadImageCommand : IRequest<Unit>
 {
     /// <summary>
-    /// Идентификатор.
+    /// Id.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Файл.
+    /// File.
     /// </summary>
     public Stream Stream { get; set; } = null!;
 }
