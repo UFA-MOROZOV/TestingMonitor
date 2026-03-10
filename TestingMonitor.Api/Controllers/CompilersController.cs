@@ -23,8 +23,8 @@ public sealed class CompilersController(IMediator mediator) : Controller
     /// </summary>
     [HttpGet("/api/compilers")]
     [ProducesResponseType<List<CompilerDto>>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<CompilerDto>>> GetCompilers(CancellationToken cancellationToken)
-        => await mediator.Send(new GetCompilersQuery(), cancellationToken);
+    public async Task<ActionResult<List<CompilerDto>>> GetCompilers([FromQuery] GetCompilersQuery query, CancellationToken cancellationToken)
+        => await mediator.Send(query, cancellationToken);
 
     /// <summary>
     /// Create a compiler.

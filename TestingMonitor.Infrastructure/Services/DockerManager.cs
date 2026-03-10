@@ -85,8 +85,16 @@ internal sealed class DockerManager : IDockerManager
             Directory.CreateDirectory(TempPath);
         }
 
+        var folder = Path.Combine(TempPath, runId.ToString());
+
+        if (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+
         var fileName = $"{Guid.NewGuid()}.cpp";
-        var filePath = Path.Combine(TempPath, runId.ToString(), fileName);
+        var filePath = Path.Combine(folder, fileName);
+
         var compiledPath = Path.Combine(TempPath, runId.ToString(), Path.GetFileNameWithoutExtension(fileName));
 
         await File.WriteAllTextAsync(filePath, code, cancellationToken);
@@ -469,7 +477,7 @@ internal sealed class DockerManager : IDockerManager
             false,
             new ContainerLogsParameters
             {
-                ShowStdout = true,
+                ShowStdout = true,  
                 ShowStderr = true,
                 Follow = false
             },

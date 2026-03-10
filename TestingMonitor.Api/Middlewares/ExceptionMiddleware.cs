@@ -39,7 +39,7 @@ public class ExceptionMiddleware
 
             var errorResponse = new ExceptionResponse
             {
-                Message = "Произошла ошибка сервера.",
+                Message = "Server error.",
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse,

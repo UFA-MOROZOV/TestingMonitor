@@ -13,6 +13,11 @@ public sealed class GetCompilerTaskByIdResponse
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Name
+    /// </summary>
+    public string Name { get; set; } = null!;
+
+    /// <summary>
     /// Used compiler.
     /// </summary>
     public CompilerDto Compiler { get; set; } = null!;
