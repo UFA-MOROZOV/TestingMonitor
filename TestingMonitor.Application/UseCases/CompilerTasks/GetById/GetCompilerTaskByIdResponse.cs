@@ -66,12 +66,37 @@ public sealed class TestExecutionDto
     public TimeSpan Duration { get; set; }
 
     /// <summary>
-    /// Is it successful.
+    /// Duration of a compilation process.
     /// </summary>
-    public bool IsSuccessful { get; set; }
+    public TimeSpan? CompileDuration { get; set; }
 
     /// <summary>
-    /// Output string.
+    /// Duration of an execution process.
     /// </summary>
-    public string? Output { get; set; }
+    public TimeSpan? RunDuration { get; set; }
+
+    /// <summary>
+    /// Output of a compiler.
+    /// </summary>
+    public string CompilerOutput { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Output of program execution.
+    /// </summary>
+    public string ProgramOutput { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Exit code of a compiler.
+    /// </summary>
+    public int? CompilerExitCode { get; set; }
+
+    /// <summary>
+    /// Exit code of a compiled file.
+    /// </summary>
+    public int? ProgramExitCode { get; set; }
+
+    /// <summary>
+    /// Is compilation succeeded
+    /// </summary>
+    public bool? CompilationSucceeded { get; set; }
 }

@@ -68,16 +68,20 @@ internal sealed class TaskExecutor(IDbContext dbContext, IDockerManager dockerMa
 
         var testRunId = Guid.NewGuid();
         
-        var output = await dockerManager.ExecuteCodeAsync(compiler, testRunId, test, headers, cancellationToken);
+        var output = await dockerManager.CompileAndRunAsync(compiler, testRunId, test, headers, cancellationToken);
 
         var testExecution = new TestExecution
         {
             Id = testRunId,
             CompilerTaskId = taskId,
             TestId = testId,
-            Output = output.Message,
-            Duration = output.Duration,
-            IsSuccessful = string.IsNullOrEmpty(output.Message),
+            CompilationSucceeded = output.CompilationSucceeded,
+            CompilerOutput = output.CompilerOutput,
+            CompileDuration = output.CompileDuration,
+            CompilerExitCode = output.CompilerExitCode,
+            ProgramExitCode = output.ProgramExitCode,
+            ProgramOutput = output.ProgramOutput,
+            RunDuration = output.RunDuration,
         };
 
         await dbContext.TestExecutions.AddAsync(testExecution, cancellationToken);

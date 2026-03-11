@@ -140,6 +140,59 @@ internal sealed class DockerManager : IDockerManager
         return result;
     }
 
+    public async Task<ExecutionResult> CompileAndRunAsync(
+        Compiler compiler,
+        Guid runId,
+        Test test,
+        List<HeaderFile> headers,
+        CancellationToken cancellationToken)
+    {
+        if (!Directory.Exists(TempPath))
+            Directory.CreateDirectory(TempPath);
+
+        var folder = Path.Combine(TempPath, runId.ToString());
+        Directory.CreateDirectory(folder);
+
+        var sourcePath = Path.Combine(folder, test.Name);
+        File.Copy(test.Path, sourcePath);
+
+        foreach (var header in headers)
+        {
+            var headerPath = Path.Combine(folder, header.Name);
+            File.Copy(header.Path, headerPath);
+        }
+
+        var binaryName = Path.GetFileNameWithoutExtension(test.Name);
+        var binaryPath = Path.Combine(folder, binaryName);
+
+        var result = new ExecutionResult();
+
+        try
+        {
+            var compileStart = DateTime.UtcNow;
+            var (compileExitCode, compileOutput) = await CompileAsync(compiler, runId, test.Name, cancellationToken);
+            result.CompileDuration = DateTime.UtcNow - compileStart;
+            result.CompilerOutput = compileOutput;
+            result.CompilerExitCode = compileExitCode;
+            result.CompilationSucceeded = result.CompilerExitCode == 0;
+
+            if (!result.CompilationSucceeded!.Value)
+                return result;
+
+            var runStart = DateTime.UtcNow;
+            var (runExitCode, runOutput) = await RunBinaryAsync(compiler, runId, binaryName, cancellationToken);
+            result.RunDuration = DateTime.UtcNow - runStart;
+            result.ProgramOutput = runOutput;
+            result.ProgramExitCode = runExitCode;
+        }
+        finally
+        {
+            try { Directory.Delete(folder, recursive: true); } catch { }
+        }
+
+        return result;
+    }
+
     public async Task<ExecutionResult> ExecuteAsync(Compiler compiler, Guid runId, string fileName, CancellationToken cancellationToken)
     {
         var nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
@@ -195,8 +248,8 @@ internal sealed class DockerManager : IDockerManager
 
             return new ExecutionResult
             {
-                Duration = executionTime,
-                Message = logs,
+                CompileDuration = executionTime,
+                CompilerOutput = logs,
             };
         }
         finally
@@ -587,6 +640,90 @@ internal sealed class DockerManager : IDockerManager
             }
         }
         catch { /* Потребуется возможное логирование */ }
+    }
+
+    private async Task<(int ExitCode, string Output)> CompileAsync(
+    Compiler compiler,
+    Guid runId,
+    string fileName,
+    CancellationToken cancellationToken)
+    {
+        var fullPath = Path.GetFullPath(TempPath);
+        var nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+
+        var config = new CreateContainerParameters
+        {
+            Image = compiler.ImageName,
+            Cmd = new[]
+            {
+            compiler.CommandName,
+            $"/src/{fileName}",
+            "-I", "src",
+            "-o", $"/src/{nameWithoutExtension}"
+        },
+            WorkingDir = "/src",
+            HostConfig = new HostConfig
+            {
+                Binds = new[] { $"{fullPath}/{runId}:/src:rw" },
+                Memory = 1024 * 1024 * 1024, // 1GB
+            },
+            AttachStdout = true,
+            AttachStderr = true,
+        };
+
+        var createResponse = await Client.Containers.CreateContainerAsync(config, cancellationToken);
+        var containerId = createResponse.ID;
+
+        try
+        {
+            await Client.Containers.StartContainerAsync(containerId, new ContainerStartParameters(), cancellationToken);
+            var waitResult = await Client.Containers.WaitContainerAsync(containerId, cancellationToken);
+            var output = await GetContainerOutputAsync(containerId);
+            return ((int) waitResult.StatusCode, output);
+        }
+        finally
+        {
+            await CleanupContainer(containerId);
+        }
+    }
+
+    private async Task<(int ExitCode, string Output)> RunBinaryAsync(
+        Compiler compiler,
+        Guid runId,
+        string binaryName,
+        CancellationToken cancellationToken)
+    {
+        var fullPath = Path.GetFullPath(TempPath);
+        var command = new List<string> { $"./{binaryName}" };
+
+        var config = new CreateContainerParameters
+        {
+            Image = compiler.ImageName,
+            Cmd = command,
+            WorkingDir = "/src",
+            HostConfig = new HostConfig
+            {
+                Binds = new[] { $"{fullPath}/{runId}:/src:rw" },
+                Memory = 1024 * 1024 * 1024,
+            },
+            AttachStdout = true,
+            AttachStderr = true,
+        };
+
+        var createResponse = await Client.Containers.CreateContainerAsync(config, cancellationToken);
+        var containerId = createResponse.ID;
+
+        try
+        {
+            await Client.Containers.StartContainerAsync(containerId, new ContainerStartParameters(), cancellationToken);
+            var waitResult = await Client.Containers.WaitContainerAsync(containerId, cancellationToken);
+            var output = await GetContainerOutputAsync(containerId);
+            return ((int) waitResult.StatusCode, output);
+        }
+        finally
+        {
+            await CleanupContainer(containerId);
+        }
     }
 
     #endregion
