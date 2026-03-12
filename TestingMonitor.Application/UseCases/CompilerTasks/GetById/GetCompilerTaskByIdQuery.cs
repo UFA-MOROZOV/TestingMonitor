@@ -10,16 +10,16 @@ namespace TestingMonitor.Application.UseCases.CompilerTasks.GetById;
 /// <summary>
 /// Query of getting compiler task.
 /// </summary>
-public sealed class GetCompilerTaskByIdQuery(Guid id) : IRequest<GetCompilerTaskByIdResponse>
+public sealed class GetCompilerTaskByIdQuery(Guid id) : IRequest<CompilerTaskByIdDto>
 {
     public Guid Id { get; set; } = id;
 
-    private class Handler(IDbContext dbContext, IMapper mapper) : IRequestHandler<GetCompilerTaskByIdQuery, GetCompilerTaskByIdResponse>
+    private class Handler(IDbContext dbContext, IMapper mapper) : IRequestHandler<GetCompilerTaskByIdQuery, CompilerTaskByIdDto>
     {
-        public async Task<GetCompilerTaskByIdResponse> Handle(GetCompilerTaskByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CompilerTaskByIdDto> Handle(GetCompilerTaskByIdQuery request, CancellationToken cancellationToken)
         {
             var compilerTask = await dbContext.CompilerTasks
-                .ProjectTo<GetCompilerTaskByIdResponse>(mapper.ConfigurationProvider)
+                .ProjectTo<CompilerTaskByIdDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (compilerTask == null)

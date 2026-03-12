@@ -5,7 +5,7 @@ namespace TestingMonitor.Application.UseCases.CompilerTasks.GetById;
 /// <summary>
 /// Compiler task.
 /// </summary>
-public sealed class GetCompilerTaskByIdResponse
+public sealed class CompilerTaskByIdDto
 {
     /// <summary>
     /// Id.
@@ -21,6 +21,16 @@ public sealed class GetCompilerTaskByIdResponse
     /// Used compiler.
     /// </summary>
     public CompilerDto Compiler { get; set; } = null!;
+
+    /// <summary>
+    /// Кол-во выполненных корректно тестов.
+    /// </summary>
+    public int SuccessfulTasksCount { get; set; }
+
+    /// <summary>
+    /// Количество задач.
+    /// </summary>
+    public int TasksCount { get; set; }
 
     /// <summary>
     /// Date of creation.
