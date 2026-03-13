@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestingMonitor.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TestingMonitor.Infrastructure.Persistence;
 namespace TestingMonitor.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260310175657_AddOutput")]
+    partial class AddOutput
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,31 +151,17 @@ namespace TestingMonitor.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool?>("CompilationSucceeded")
-                        .HasColumnType("boolean");
-
-                    b.Property<TimeSpan?>("CompileDuration")
-                        .HasColumnType("interval");
-
-                    b.Property<int?>("CompilerExitCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CompilerOutput")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("CompilerTaskId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("ProgramExitCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ProgramOutput")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<TimeSpan?>("RunDuration")
+                    b.Property<TimeSpan>("Duration")
                         .HasColumnType("interval");
+
+                    b.Property<bool>("IsSuccessful")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Output")
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("TestId")
                         .HasColumnType("uuid");

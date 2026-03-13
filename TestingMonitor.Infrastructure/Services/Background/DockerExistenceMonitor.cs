@@ -40,7 +40,7 @@ internal class DockerExistenceMonitor(IServiceScopeFactory serviceScopeFactory, 
             }
             catch (Exception ex)
             {
-                logger.LogError("Не удалось проверить существование образов: {error}", ex);
+                logger.LogError("Cannot check docker existence: {error}", ex);
             }
 
             await Task.Delay(Delay, stoppingToken);

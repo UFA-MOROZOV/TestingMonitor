@@ -5,13 +5,11 @@
 /// </summary>
 public sealed class ExecutionResult
 {
-    /// <summary>
-    /// Вывод.
-    /// </summary>
-    public string Message { get; set; } = null!;
-
-    /// <summary>
-    /// Длительность.
-    /// </summary>
-    public TimeSpan Duration { get; set; }
+    public TimeSpan? CompileDuration { get; set; }
+    public TimeSpan? RunDuration { get; set; }
+    public string CompilerOutput { get; set; } = string.Empty;
+    public string ProgramOutput { get; set; } = string.Empty;
+    public int? CompilerExitCode { get; set; }
+    public int? ProgramExitCode { get; set; }
+    public bool? CompilationSucceeded { get; set; }
 }

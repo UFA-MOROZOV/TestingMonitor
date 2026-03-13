@@ -22,7 +22,10 @@ public class MappingProfile : Profile
 
         CreateMap<Compiler, CompilerDto>();
 
-        CreateMap<CompilerTask, GetCompilerTaskByIdResponse>();
+        CreateMap<CompilerTask, CompilerTaskByIdDto>()
+            .ForMember(x => x.SuccessfulTasksCount, x => x.MapFrom(y =>
+                y.TestsExecuted.Count(x => x.CompilerExitCode == 0 && x.ProgramExitCode == 0)))
+            .ForMember(x => x.TasksCount, x => x.MapFrom(y => y.TestsExecuted.Count()));
 
         CreateMap<CompilerTask, CompilerTaskDto>()
             .ForMember(x => x.IsCompleted, x => x.MapFrom(y => y.DateOfCompletion != null));

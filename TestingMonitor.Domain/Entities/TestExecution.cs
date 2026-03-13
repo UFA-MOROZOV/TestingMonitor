@@ -31,17 +31,37 @@ public sealed class TestExecution
     public Test? Test { get; set; }
 
     /// <summary>
-    /// Duration.
+    /// Duration of a compilation process.
     /// </summary>
-    public TimeSpan Duration { get; set; }
+    public TimeSpan? CompileDuration { get; set; }
 
     /// <summary>
-    /// Is test execution a success.
+    /// Duration of an execution process.
     /// </summary>
-    public bool IsSuccessful { get; set; }
+    public TimeSpan? RunDuration { get; set; }
 
     /// <summary>
-    /// Output.
+    /// Output of a compiler.
     /// </summary>
-    public string? Output { get; set; }
+    public string CompilerOutput { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Output of program execution.
+    /// </summary>
+    public string ProgramOutput { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Exit code of a compiler.
+    /// </summary>
+    public int? CompilerExitCode { get; set; }
+
+    /// <summary>
+    /// Exit code of a compiled file.
+    /// </summary>
+    public int? ProgramExitCode { get; set; }
+
+    /// <summary>
+    /// Is compilation succeeded
+    /// </summary>
+    public bool? CompilationSucceeded { get; set; }
 }

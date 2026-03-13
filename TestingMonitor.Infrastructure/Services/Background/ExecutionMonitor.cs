@@ -32,7 +32,7 @@ internal sealed class ExecutionMonitor(IServiceProvider serviceProvider, ILogger
             }
             catch (Exception ex)
             {
-                logger.LogError("Ошибка выполнения: {ex}", ex.Message);
+                logger.LogError("Execution error: {ex}", ex.Message);
             }
 
             await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
